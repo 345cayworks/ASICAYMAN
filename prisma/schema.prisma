@@ -1,0 +1,330 @@
+// ASI Cayman — Prisma schema
+// One database, all models from the brief, plus Auth.js v5 NextAuth tables.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================================
+// Auth (NextAuth v5 / Auth.js) — tables required by the adapter
+// ============================================================
+
+enum Role {
+  MEMBER
+  EXHIBITOR
+  ADMIN
+  SUPERADMIN
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String     @unique
+  emailVerified DateTime?
+  image         String?
+  phone         String?
+  whatsapp      String?
+  passwordHash  String?
+  role          Role       @default(MEMBER)
+  status        UserStatus @default(PENDING)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  accounts            Account[]
+  sessions            Session[]
+  memberProfile       MemberProfile?
+  businessListings    BusinessListing[]   @relation("BusinessOwner")
+  expoRegistrations   ExpoRegistration[]
+  paymentReceipts     PaymentReceipt[]
+  reviewedReceipts    PaymentReceipt[]    @relation("ReceiptReviewer")
+  authoredAnnouncements Announcement[]    @relation("AnnouncementAuthor")
+
+  @@index([role, status])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================================
+// Domain models
+// ============================================================
+
+enum MembershipType {
+  INDIVIDUAL
+  BUSINESS
+  STUDENT
+  HONORARY
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  LAPSED
+  REVOKED
+}
+
+model MemberProfile {
+  id                String           @id @default(cuid())
+  userId            String           @unique
+  churchAffiliation String?
+  membershipType    MembershipType   @default(INDIVIDUAL)
+  membershipStatus  MembershipStatus @default(PENDING)
+  profilePhotoUrl   String?
+  bio               String?          @db.Text
+  joinedAt          DateTime?
+  renewalDate       DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([membershipStatus])
+}
+
+enum ListingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  HIDDEN
+}
+
+model BusinessListing {
+  id            String        @id @default(cuid())
+  ownerId       String
+  businessName  String
+  slug          String        @unique
+  category      String
+  description   String        @db.Text
+  phone         String?
+  email         String?
+  website       String?
+  socialLinks   Json?         // { facebook, instagram, linkedin, twitter, ... }
+  logoUrl       String?
+  imageUrls     String[]      @default([])
+  specialOffer  String?       @db.Text
+  status        ListingStatus @default(PENDING)
+  isFeatured    Boolean       @default(false)
+  isPublic      Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  owner User @relation("BusinessOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([status, isPublic])
+  @@index([category])
+  @@index([isFeatured])
+}
+
+enum EventType {
+  EXPO
+  WORKSHOP
+  CONVENTION
+  SOCIAL
+  OTHER
+}
+
+model Event {
+  id               String    @id @default(cuid())
+  title            String
+  slug             String    @unique
+  description      String    @db.Text
+  startDate        DateTime
+  endDate          DateTime?
+  location         String
+  eventType        EventType @default(EXPO)
+  registrationOpen Boolean   @default(true)
+  // Pricing snapshot at event-level so future events can have their own structure
+  memberPrice      Int       @default(10000) // cents
+  regularPrice     Int       @default(15000)
+  earlyBirdPrice   Int       @default(10000)
+  earlyBirdUntil   DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  expoRegistrations ExpoRegistration[]
+}
+
+enum PaymentStatus {
+  PENDING
+  RECEIPT_UPLOADED
+  VERIFIED
+  REJECTED
+  PAID
+  REFUNDED
+}
+
+enum ReceiptStatus {
+  NONE
+  UPLOADED
+  APPROVED
+  REJECTED
+}
+
+model ExpoRegistration {
+  id                   String        @id @default(cuid())
+  userId               String?       // nullable: public can register without account in future iterations
+  eventId              String
+
+  // Snapshot at time of registration
+  fullName             String
+  businessName         String
+  email                String
+  phone                String
+  businessCategory     String
+
+  isAsiMember          Boolean       @default(false)
+  needsBooth           Boolean       @default(true)
+  wantsVideoSubmission Boolean       @default(false)
+  promoVideoUrl        String?
+  wantsInterview       Boolean       @default(false)
+
+  // Pricing snapshot — always set server-side
+  paymentAmount        Int           // cents
+  earlyBirdApplied     Boolean       @default(false)
+  paymentStatus        PaymentStatus @default(PENDING)
+  receiptUrl           String?
+  receiptStatus        ReceiptStatus @default(NONE)
+
+  adminNotes           String?       @db.Text
+
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  user      User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  event     Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  receipts  PaymentReceipt[]
+
+  @@unique([eventId, email])
+  @@index([eventId, paymentStatus])
+  @@index([isAsiMember])
+  @@index([wantsInterview])
+  @@index([wantsVideoSubmission])
+}
+
+model PaymentReceipt {
+  id                 String        @id @default(cuid())
+  userId             String?
+  expoRegistrationId String?
+  amount             Int           // cents
+  paymentMethod      String        @default("RBC_TRANSFER")
+  receiptFileUrl     String
+  status             ReceiptStatus @default(UPLOADED)
+  reviewedBy         String?
+  reviewedAt         DateTime?
+  adminNotes         String?       @db.Text
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  user             User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  reviewer         User?             @relation("ReceiptReviewer", fields: [reviewedBy], references: [id], onDelete: SetNull)
+  expoRegistration ExpoRegistration? @relation(fields: [expoRegistrationId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([expoRegistrationId])
+}
+
+enum AnnouncementAudience {
+  ALL
+  MEMBERS
+  EXHIBITORS
+  ADMINS
+}
+
+enum AnnouncementStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Announcement {
+  id          String               @id @default(cuid())
+  title       String
+  body        String               @db.Text
+  audience    AnnouncementAudience @default(ALL)
+  status      AnnouncementStatus   @default(DRAFT)
+  publishedAt DateTime?
+  authorId    String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  author User? @relation("AnnouncementAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+  @@index([audience])
+}
+
+enum BenefitStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Benefit {
+  id          String        @id @default(cuid())
+  title       String
+  description String        @db.Text
+  memberOnly  Boolean       @default(true)
+  url         String?
+  fileUrl     String?
+  status      BenefitStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  inquiry   String
+  message   String   @db.Text
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([handled, createdAt])
+}
