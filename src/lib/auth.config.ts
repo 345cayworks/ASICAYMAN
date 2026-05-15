@@ -1,5 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import type { Role, UserStatus } from "@prisma/client";
+// Import (type-only) so the module is loaded and can be augmented below.
+import type {} from "next-auth/jwt";
 
 // Type augmentation for the session/user/JWT lives here so both the slim
 // (middleware) and full (route handler) configs share the same types.
@@ -51,9 +53,9 @@ export const authConfig = {
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id;
-        session.user.role = token.role;
-        session.user.status = token.status;
+        session.user.id = token.id as string;
+        session.user.role = token.role as Role;
+        session.user.status = token.status as UserStatus;
       }
       return session;
     },
