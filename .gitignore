@@ -11,3 +11,5 @@ out
 .netlify
 coverage
 prisma/migrations/dev.db*
+next-env.d.ts
+tsconfig.tsbuildinfo

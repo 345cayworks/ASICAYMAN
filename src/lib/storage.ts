@@ -57,7 +57,7 @@ class NetlifyBlobsDriver implements StorageDriver {
     const safeName = sanitize(filename);
     const id = crypto.randomBytes(8).toString("hex");
     const key = path.posix.join(folder, `${id}-${safeName}`);
-    await store.set(key, body, { metadata: { contentType } });
+    await store.set(key, body as unknown as ArrayBuffer, { metadata: { contentType } });
     return {
       key,
       url: `/api/files/${key}`,
