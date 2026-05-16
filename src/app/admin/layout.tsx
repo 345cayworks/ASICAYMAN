@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/rbac";
-import { signOut } from "@/lib/auth";
-import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, LogOut, ArrowLeft } from "lucide-react";
+import { SignOutButton } from "@/components/site/sign-out-button";
+import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, ArrowLeft } from "lucide-react";
 
 const adminNav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
@@ -56,11 +56,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <p className="text-xs text-[color:var(--color-navy-300)]">Signed in as</p>
             <p className="mt-0.5 text-sm font-medium text-white truncate">{user.name ?? user.email}</p>
             <p className="text-xs text-[color:var(--color-navy-400)]">{user.role}</p>
-            <form action={async () => { "use server"; await signOut({ redirectTo: "/" }); }}>
-              <button type="submit" className="mt-4 flex items-center gap-2 text-sm text-[color:var(--color-navy-200)] hover:text-white">
-                <LogOut size={14} /> Sign out
-              </button>
-            </form>
+            <SignOutButton className="mt-4 flex items-center gap-2 text-sm text-[color:var(--color-navy-200)] hover:text-white disabled:opacity-60" />
           </div>
         </aside>
 

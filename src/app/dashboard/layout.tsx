@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/rbac";
-import { signOut } from "@/lib/auth";
-import { Home, User, Briefcase, Ticket, Gift, LogOut, ShieldCheck } from "lucide-react";
+import { SignOutButton } from "@/components/site/sign-out-button";
+import { Home, User, Briefcase, Ticket, Gift, ShieldCheck } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Overview", icon: Home },
@@ -54,16 +54,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <p className="mt-0.5 text-sm font-medium text-[color:var(--color-navy-900)] truncate">{user.name ?? user.email}</p>
             <p className="text-xs text-[color:var(--color-navy-600)] truncate">{user.email}</p>
 
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <button type="submit" className="mt-4 flex items-center gap-2 text-sm text-[color:var(--color-navy-700)] hover:text-[color:var(--color-navy-900)]">
-                <LogOut size={14} /> Sign out
-              </button>
-            </form>
+            <SignOutButton className="mt-4 flex items-center gap-2 text-sm text-[color:var(--color-navy-700)] hover:text-[color:var(--color-navy-900)] disabled:opacity-60" />
           </div>
         </aside>
 
