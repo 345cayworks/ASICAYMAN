@@ -129,22 +129,38 @@ asi-cayman/
 └── .env.example
 ```
 
-## Deploying to Netlify
+## Deploying to Netlify (automatic — no local machine needed)
 
-1. Push to GitHub.
-2. Connect the repo in Netlify. The included `netlify.toml` handles build + Next plugin.
-3. In Netlify → site settings → environment variables, set:
-   - `DATABASE_URL` (Neon pooled)
-   - `DIRECT_URL` (Neon direct)
-   - `AUTH_SECRET`
-   - `NEXTAUTH_URL` (your `*.netlify.app` URL — or your custom domain)
-   - `AUTH_TRUST_HOST=true`
+With the **Neon–Netlify integration** enabled, `DATABASE_URL` is injected into
+the build automatically. The Netlify build command runs
+`scripts/netlify-build.sh`, which on every deploy: generates the Prisma client,
+applies the schema (`prisma db push` — idempotent/non-destructive), runs the
+idempotent seed (Expo 2026 event, superadmin, benefits), then builds the app.
+So a fresh database is provisioned and seeded by the deploy itself.
+
+Steps:
+
+1. Push to GitHub (already connected to Netlify).
+2. Confirm the Neon–Netlify integration is active (Netlify → Site → Integrations
+   → Neon) so `DATABASE_URL` is present in build env.
+3. In Netlify → Site configuration → Environment variables, set the few vars
+   Neon does **not** provide:
+   - `AUTH_SECRET` — `openssl rand -base64 32`
+   - `NEXTAUTH_URL` — your `*.netlify.app` URL (or custom domain)
    - `STORAGE_DRIVER=netlify-blobs`
-   - (optional) email/SMTP vars
-4. Trigger a deploy. Run `npx prisma db push` once locally (or as a Netlify build hook) against your production database to apply the schema.
-5. Run the seed against production once: `npm run db:seed` (with prod env vars).
+   - (optional) `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` — otherwise the seed
+     uses `admin@asicayman.org` / `ChangeMe-Immediately-2026`
+   - (optional) `DIRECT_URL` — only if your Neon integration doesn't expose an
+     unpooled URL; the build script already falls back sensibly.
+4. Trigger a deploy. Watch the deploy log for `1/4 … 4/4` to confirm schema +
+   seed ran. Done — the site is live and populated.
 
-Netlify Blobs is auto-configured on Netlify deploys — no extra setup. Receipts will be written there once `STORAGE_DRIVER=netlify-blobs`.
+`AUTH_TRUST_HOST` is **not required** (set in code via `trustHost: true`).
+Netlify Blobs is auto-configured on Netlify deploys — receipts are written there
+once `STORAGE_DRIVER=netlify-blobs`.
+
+> Note: `npm run build` (used locally) stays DB-free; only the Netlify build
+> command applies the schema/seed.
 
 ## Admin operations runbook
 
