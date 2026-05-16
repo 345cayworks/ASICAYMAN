@@ -55,6 +55,20 @@ export default async function AdminMembersPage({ searchParams }: Props) {
                 <td className="px-5 py-4">
                   <p className="font-medium">{m.name ?? "—"}</p>
                   <p className="text-xs text-[color:var(--color-navy-600)]">{m.email}</p>
+                  {m.phone && (
+                    <p className="text-xs text-[color:var(--color-navy-600)]">{m.phone}</p>
+                  )}
+                  {m.memberProfile?.churchAffiliation && (
+                    <p className="mt-1 text-xs text-[color:var(--color-navy-700)]">
+                      <span className="text-[color:var(--color-navy-500)]">Church/Co.:</span>{" "}
+                      {m.memberProfile.churchAffiliation}
+                    </p>
+                  )}
+                  {m.memberProfile?.bio && (
+                    <p className="mt-1 max-w-xs text-xs text-[color:var(--color-navy-600)] line-clamp-3" title={m.memberProfile.bio}>
+                      “{m.memberProfile.bio}”
+                    </p>
+                  )}
                 </td>
                 <td className="px-3 py-4 text-xs text-[color:var(--color-navy-600)]">{m.createdAt.toLocaleDateString()}</td>
                 <td className="px-3 py-4">

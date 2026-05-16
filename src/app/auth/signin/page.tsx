@@ -23,8 +23,8 @@ export default async function SignInPage({
 
       <p className="mt-6 text-sm text-center text-[color:var(--color-navy-700)]">
         New to ASI Cayman?{" "}
-        <Link href="/auth/signup" className="text-[color:var(--color-navy-900)] underline underline-offset-4">
-          Create an account
+        <Link href="/membership/apply" className="text-[color:var(--color-navy-900)] underline underline-offset-4">
+          Apply for membership
         </Link>
       </p>
     </section>

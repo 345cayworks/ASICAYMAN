@@ -19,6 +19,34 @@ export const signInSchema = z.object({
   password: z.string().min(1),
 });
 
+// ----- Membership application -----
+export const membershipApplicationSchema = z
+  .object({
+    name: z.string().trim().min(2, "Please enter your full name").max(120),
+    email: z.string().trim().toLowerCase().email("Enter a valid email"),
+    phone: z.string().trim().min(5, "Enter a phone number").max(40),
+    whatsapp: z.string().trim().max(40).optional().or(z.literal("")),
+    churchAffiliation: z
+      .string()
+      .trim()
+      .min(2, "Tell us your home church or company")
+      .max(160),
+    membershipType: z.enum(["INDIVIDUAL", "BUSINESS", "STUDENT"]),
+    reason: z
+      .string()
+      .trim()
+      .min(20, "Tell us a little about why you'd like to join")
+      .max(2000),
+    password: z.string().min(8, "Use at least 8 characters").max(120),
+    confirmPassword: z.string(),
+  })
+  .refine((d) => d.password === d.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords don't match",
+  });
+
+export type MembershipApplicationInput = z.infer<typeof membershipApplicationSchema>;
+
 // ----- Expo registration -----
 export const expoRegistrationSchema = z.object({
   fullName: z.string().trim().min(2).max(120),

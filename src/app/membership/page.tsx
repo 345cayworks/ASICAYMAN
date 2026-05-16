@@ -28,7 +28,7 @@ export default function MembershipPage() {
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/auth/signup" className="btn btn-gold">
+          <Link href="/membership/apply" className="btn btn-gold">
             Become a member <ArrowRight size={16} />
           </Link>
           <Link href="/contact" className="btn btn-outline">Ask a question</Link>
@@ -68,7 +68,7 @@ export default function MembershipPage() {
             </p>
           </div>
           <div className="lg:col-span-2 flex flex-col gap-3">
-            <Link href="/auth/signup" className="btn btn-primary">Create my account</Link>
+            <Link href="/membership/apply" className="btn btn-primary">Apply for membership</Link>
             <Link href="/expo/register" className="btn btn-gold">Or just register a booth</Link>
             <p className="text-xs text-[color:var(--color-navy-600)] text-center">
               Already a member? <Link href="/auth/signin" className="underline underline-offset-4">Sign in</Link>
