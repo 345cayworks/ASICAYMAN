@@ -5,8 +5,9 @@
 set -euo pipefail
 
 # Schema changes (prisma db push) should use a DIRECT/unpooled connection.
-# Prefer an explicit DIRECT_URL, then Neon's unpooled var, then DATABASE_URL.
-MIGRATE_URL="${DIRECT_URL:-${DATABASE_URL_UNPOOLED:-${DATABASE_URL:-}}}"
+# The Neon–Netlify integration injects NETLIFY_DATABASE_URL_UNPOOLED /
+# NETLIFY_DATABASE_URL. Prefer an unpooled URL, falling back to pooled.
+MIGRATE_URL="${DIRECT_URL:-${NETLIFY_DATABASE_URL_UNPOOLED:-${DATABASE_URL_UNPOOLED:-${DATABASE_URL:-${NETLIFY_DATABASE_URL:-}}}}}"
 
 if [ -z "${MIGRATE_URL}" ]; then
   echo "ERROR: No database URL found in the build environment." >&2
