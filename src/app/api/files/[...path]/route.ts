@@ -50,11 +50,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Params
       select: { id: true },
     });
     if (!owned) {
-      // Also allow owner of an expo registration that references it
-      const reg = await prisma.expoRegistration.findFirst({
-        where: { receiptUrl: ownedUrl, OR: [{ userId: session.user.id }, { email: session.user.email ?? "" }] },
-        select: { id: true },
-      });
+      // Also allow owner of an expo registration that references it.
+      // Match by account id, plus email only when we actually have one.
+      const ownerOr: { userId?: string; email?: string }[] = [];
+      if (session.user.id) ownerOr.push({ userId: session.user.id });
+      if (session.user.email) ownerOr.push({ email: session.user.email });
+      const reg = ownerOr.length
+        ? await prisma.expoRegistration.findFirst({
+            where: { receiptUrl: ownedUrl, OR: ownerOr },
+            select: { id: true },
+          })
+        : null;
       if (!reg) return new NextResponse("Forbidden", { status: 403 });
     }
   }
@@ -70,13 +76,20 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Params
     return new NextResponse(stream as ReadableStream, {
       headers: {
         "Content-Type": (meta?.metadata?.contentType as string) ?? "application/octet-stream",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Disposition": "inline",
         "Cache-Control": "private, max-age=0, must-revalidate",
       },
     });
   }
 
-  // Local driver — read from ./.uploads
-  const abs = path.join(process.cwd(), ".uploads", key);
+  // Local driver — read from ./.uploads.
+  // Defence-in-depth: resolve and confirm the path stays inside the uploads root.
+  const uploadsRoot = path.join(process.cwd(), ".uploads");
+  const abs = path.resolve(uploadsRoot, key);
+  if (abs !== uploadsRoot && !abs.startsWith(uploadsRoot + path.sep)) {
+    return new NextResponse("Forbidden", { status: 403 });
+  }
   try {
     const file = await fs.readFile(abs);
     const ext = path.extname(abs).toLowerCase();
@@ -90,6 +103,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Params
     return new NextResponse(file, {
       headers: {
         "Content-Type": mime,
+        "X-Content-Type-Options": "nosniff",
+        "Content-Disposition": "inline",
         "Cache-Control": "private, max-age=0, must-revalidate",
       },
     });

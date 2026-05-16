@@ -40,6 +40,8 @@ declare module "next-auth/jwt" {
  * adds the adapter + Credentials.authorize() for the route handler.
  */
 export const authConfig = {
+  // Required on non-Vercel hosts (Netlify): trust the deployment host header.
+  trustHost: true,
   pages: { signIn: "/auth/signin" },
   session: { strategy: "jwt" },
   callbacks: {

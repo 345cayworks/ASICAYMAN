@@ -146,6 +146,39 @@ asi-cayman/
 
 Netlify Blobs is auto-configured on Netlify deploys — no extra setup. Receipts will be written there once `STORAGE_DRIVER=netlify-blobs`.
 
+## Admin operations runbook
+
+Day-to-day tasks for ASI Cayman staff (ADMIN or SUPERADMIN), all under `/admin`:
+
+**Approving a new member**
+1. `/admin/members` → find the `PENDING` user.
+2. Click **Approve** — sets the `User` to `ACTIVE` and `MemberProfile` to `ACTIVE` (records `joinedAt`).
+3. **Reject** suspends the account instead. Only a SUPERADMIN can change a user's role.
+
+**Verifying an expo payment** (the core revenue workflow)
+Payment status moves through: `PENDING` → `RECEIPT_UPLOADED` → `VERIFIED`/`PAID` (or `REJECTED`).
+1. Exhibitor pays at RBC (Cheque Account #06975-1154855) and uploads the receipt at `/dashboard/registration`, or emails/WhatsApps it for staff to attach.
+2. `/admin/receipts` shows the pending-receipt queue. Click the receipt to open the file (access-controlled — only admins and the owner can view it).
+3. Cross-check the amount against `paymentAmount` (server-computed: $100 ASI member / $100 early-bird ≤ 31 May 2026 / $150 regular).
+4. On `/admin/registrations`, **Mark paid** (sets `PAID` + receipt `APPROVED`) or **Reject** (adds a note the member can see). Use filters to isolate ASI members, early-bird, booth-required, interview, or video-submission registrants.
+
+**Business listings**
+`/admin/listings` — Approve/Reject (only `APPROVED` + public listings show in `/directory`), and Feature/unfeature for the homepage preview.
+
+**Announcements**
+`/admin/announcements` — draft, then publish to an audience (`ALL`, `MEMBERS`, `EXHIBITORS`, `ADMINS`). Archive to retire.
+
+**Exporting** — registration/member tables are filterable; export via the table actions for reporting.
+
+## Security posture
+
+- **RBAC** enforced in two layers: edge middleware (`src/middleware.ts`) gates `/dashboard` and `/admin`; every server action and admin page re-checks via `requirePermission`/`requireAdmin` (`src/lib/rbac.ts`).
+- **Server-authoritative pricing** — the client preview is never trusted; `computeExpoPrice` runs on every registration write.
+- **Access-controlled file serving** — `/api/files/[...path]` requires auth, restricts to admins or the file owner, blocks path traversal (string check + resolved-path containment), and serves with `X-Content-Type-Options: nosniff`.
+- **Security headers** applied app-wide in `next.config.ts` (CSP, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy) so they hold on any host, with `netlify.toml` reinforcing them on Netlify.
+- **`trustHost: true`** is set in code (`src/lib/auth.config.ts`) so Auth.js works on Netlify even if `AUTH_TRUST_HOST` is not set as an env var.
+- Passwords hashed with bcrypt (cost 12); receipts limited to 8 MB and JPG/PNG/HEIC/WEBP/PDF only.
+
 ## What's next (Sprint 2+)
 
 See `QA_CHECKLIST.md` for the manual test plan, and refer to the original brief for Sprint 2–5 scope:
