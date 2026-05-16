@@ -33,7 +33,10 @@ async function main() {
   console.log(`  ✓ Event: ${expo.title}`);
 
   // ---------- Superadmin ----------
-  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? "admin@asicayman.org";
+  // Sign-in lowercases the email before lookup, so store it lowercased.
+  const adminEmail = (process.env.SEED_ADMIN_EMAIL ?? "admin@asicayman.org")
+    .trim()
+    .toLowerCase();
   const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "ChangeMe-Immediately-2026";
   const adminName = process.env.SEED_ADMIN_NAME ?? "ASI Cayman Admin";
   const passwordHash = await bcrypt.hash(adminPassword, 12);
