@@ -51,6 +51,17 @@ Run through this list after `npm run dev` against a fresh database to validate t
 - [ ] Footer columns stack on mobile
 - [ ] Cards and grids reflow without horizontal scroll
 
+## Security (Phase 5)
+
+- [x] Security headers present on all routes (CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) — verified via `curl -D -`
+- [x] `/api/files/*` returns 401 when unauthenticated
+- [x] `/api/files/*` blocks path traversal (`..%2f..%2f…` → 403)
+- [x] Receipt files served with `nosniff` + `Content-Disposition: inline`
+- [x] Auth.js works without `AUTH_TRUST_HOST` env (in-code `trustHost: true`) — `/api/auth/session` returns 200, no `UntrustedHost`
+- [x] Expo pricing computed server-side; verified member / early-bird / regular / 31-May boundary
+- [ ] Non-owner cannot open another member's receipt (manual: sign in as member B, request member A's receipt URL → 403)
+- [ ] SUPERADMIN-only role change rejected for plain ADMIN (manual)
+
 ## Authentication
 
 ### Signup `/auth/signup`
