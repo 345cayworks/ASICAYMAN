@@ -113,6 +113,8 @@ model MemberProfile {
   id                String           @id @default(cuid())
   userId            String           @unique
   churchAffiliation String?
+  businessOrProfession String?
+  membershipCategory   String?       // BUSINESS_UNDER_10 | BUSINESS_10_PLUS | PROFESSIONAL | SELF_SUPPORTING_MINISTRY
   membershipType    MembershipType   @default(INDIVIDUAL)
   membershipStatus  MembershipStatus @default(PENDING)
   profilePhotoUrl   String?

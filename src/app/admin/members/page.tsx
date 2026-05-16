@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { approveMember, rejectMember, changeRole } from "@/app/admin/actions";
+import { getMembershipCategory } from "@/lib/membership";
 import { CheckCircle2, X } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -58,15 +59,24 @@ export default async function AdminMembersPage({ searchParams }: Props) {
                   {m.phone && (
                     <p className="text-xs text-[color:var(--color-navy-600)]">{m.phone}</p>
                   )}
-                  {m.memberProfile?.churchAffiliation && (
+                  {m.memberProfile?.businessOrProfession && (
                     <p className="mt-1 text-xs text-[color:var(--color-navy-700)]">
-                      <span className="text-[color:var(--color-navy-500)]">Church/Co.:</span>{" "}
+                      <span className="text-[color:var(--color-navy-500)]">Business/Profession:</span>{" "}
+                      {m.memberProfile.businessOrProfession}
+                    </p>
+                  )}
+                  {m.memberProfile?.churchAffiliation && (
+                    <p className="text-xs text-[color:var(--color-navy-700)]">
+                      <span className="text-[color:var(--color-navy-500)]">Church:</span>{" "}
                       {m.memberProfile.churchAffiliation}
                     </p>
                   )}
-                  {m.memberProfile?.bio && (
-                    <p className="mt-1 max-w-xs text-xs text-[color:var(--color-navy-600)] line-clamp-3" title={m.memberProfile.bio}>
-                      “{m.memberProfile.bio}”
+                  {m.memberProfile?.membershipCategory && (
+                    <p className="mt-1 text-xs">
+                      {(() => {
+                        const c = getMembershipCategory(m.memberProfile.membershipCategory);
+                        return c ? `${c.label} · CI$${c.feeKyd}` : m.memberProfile.membershipCategory;
+                      })()}
                     </p>
                   )}
                 </td>

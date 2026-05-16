@@ -1,22 +1,84 @@
 import Link from "next/link";
 import { MembershipApplicationForm } from "@/components/forms/membership-application-form";
+import { MEMBERSHIP_CATEGORIES } from "@/lib/membership";
 
-export const metadata = { title: "Apply for membership" };
+export const metadata = { title: "ASI Cayman Membership Application" };
+
+const OBJECTIVES = [
+  "To provide a forum for spiritual nurture, empowering members to model Christ in their business and professional life.",
+  "To affirm the gifts of Adventist professionals and business persons and provide for their professional growth through relevant seminars, lectures, and workshops.",
+  "To allow Adventist business and professional persons to network with each other formally and informally, facilitating mutual support, advertisement of products, and commercial growth.",
+  "To enable members to focus on the mission of the Church, utilizing their spiritual, human and financial resources, individually and collectively, for the proclamation of the Gospel as they minister in the marketplace.",
+  "To encourage business and professional persons to conduct their activities in full harmony with the standards and objectives of the Seventh-day Adventist Church and maintain harmonious relationships with the Church and its leadership.",
+];
 
 export default function MembershipApplyPage() {
   return (
     <section className="mx-auto max-w-2xl px-5 pt-16 md:pt-20 pb-24">
       <p className="section-eyebrow">Membership</p>
       <h1 className="mt-4 font-display text-3xl md:text-4xl tracking-tight">
-        Apply to become a member.
+        ASI Cayman Membership Application
       </h1>
-      <p className="mt-3 text-[color:var(--color-navy-700)] leading-relaxed">
-        Join a fellowship of Seventh-day Adventist business owners, professionals,
-        and students supporting Christ-centered enterprise in the Cayman Islands.
-        Submit your application below — an admin will review and activate your
-        access, then you can complete your profile, list your business, and
-        register for the expo.
-      </p>
+
+      <div className="mt-6 space-y-5 text-sm text-[color:var(--color-navy-700)] leading-relaxed">
+        <div>
+          <h2 className="font-display text-lg text-[color:var(--color-navy-900)]">What is ASI?</h2>
+          <p className="mt-2">
+            Adventist-Laymen&apos;s Services &amp; Industries (ASI) is an organization of
+            Seventh-day Adventist Church members who work in the private sector in business
+            and professional vocations. We recognize that our time, talents, treasures, and
+            body temple belong to God, and that our vocations can and should be a ministry to
+            aid in the advancement of the gospel commission. We are committed to supporting
+            the Seventh-day Adventist Church and its outreach programs — health, education,
+            evangelism, community services, family concerns, and special projects. Our motto
+            is <em>&ldquo;Sharing Christ in the Marketplace&rdquo;</em>.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-display text-lg text-[color:var(--color-navy-900)]">Objectives</h2>
+          <ol className="mt-2 list-decimal pl-5 space-y-1.5">
+            {OBJECTIVES.map((o) => (
+              <li key={o}>{o}</li>
+            ))}
+          </ol>
+        </div>
+
+        <div>
+          <h2 className="font-display text-lg text-[color:var(--color-navy-900)]">Membership</h2>
+          <p className="mt-2">
+            Membership in ASI is available to any Seventh-day Adventist Church member in good
+            standing who operates a business, provides a professional service, or operates a
+            supporting ministry, and whose business has been in operation for at least six
+            months. Annual membership fees by category:
+          </p>
+          <ul className="mt-3 rounded-lg border border-[color:var(--color-navy-100)] divide-y divide-[color:var(--color-navy-100)]">
+            {MEMBERSHIP_CATEGORIES.map((c) => (
+              <li key={c.value} className="flex justify-between px-4 py-2.5">
+                <span>{c.label}</span>
+                <span className="font-medium text-[color:var(--color-gold-700)]">
+                  CI${c.feeKyd}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-lg bg-[color:var(--color-cream)] p-4">
+          <h2 className="font-display text-base text-[color:var(--color-navy-900)]">
+            Payment instructions
+          </h2>
+          <p className="mt-1.5">
+            Payment should be made to RBC — <strong>ASI Cayman cheque account
+            #06975-1154855</strong>. Receipts should be sent to{" "}
+            <a className="underline" href="mailto:asicayman24@gmail.com">
+              asicayman24@gmail.com
+            </a>{" "}
+            or WhatsApp to <strong>345 324 0458</strong>. You can submit your application now
+            and send the receipt after payment.
+          </p>
+        </div>
+      </div>
 
       <div className="mt-8 card p-7">
         <MembershipApplicationForm />

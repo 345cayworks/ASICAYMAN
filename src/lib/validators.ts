@@ -19,24 +19,33 @@ export const signInSchema = z.object({
   password: z.string().min(1),
 });
 
-// ----- Membership application -----
+// ----- Membership application (official ASI Cayman form) -----
 export const membershipApplicationSchema = z
   .object({
-    name: z.string().trim().min(2, "Please enter your full name").max(120),
-    email: z.string().trim().toLowerCase().email("Enter a valid email"),
+    name: z.string().trim().min(2, "Please enter your name").max(120),
     phone: z.string().trim().min(5, "Enter a phone number").max(40),
-    whatsapp: z.string().trim().max(40).optional().or(z.literal("")),
+    email: z.string().trim().toLowerCase().email("Enter a valid email"),
+    businessOrProfession: z
+      .string()
+      .trim()
+      .min(2, "Enter your business or profession")
+      .max(160),
     churchAffiliation: z
       .string()
       .trim()
-      .min(2, "Tell us your home church or company")
+      .min(2, "Enter the name of your church")
       .max(160),
-    membershipType: z.enum(["INDIVIDUAL", "BUSINESS", "STUDENT"]),
-    reason: z
-      .string()
-      .trim()
-      .min(20, "Tell us a little about why you'd like to join")
-      .max(2000),
+    membershipCategory: z.enum([
+      "BUSINESS_UNDER_10",
+      "BUSINESS_10_PLUS",
+      "PROFESSIONAL",
+      "SELF_SUPPORTING_MINISTRY",
+    ]),
+    commitment: z.literal("YES", {
+      errorMap: () => ({
+        message: "You must agree to the ASI commitment to apply",
+      }),
+    }),
     password: z.string().min(8, "Use at least 8 characters").max(120),
     confirmPassword: z.string(),
   })

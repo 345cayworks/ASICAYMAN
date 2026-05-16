@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { membershipApplicationSchema } from "@/lib/validators";
+import { getMembershipCategory } from "@/lib/membership";
 import { signIn } from "@/lib/auth";
 
 export type MembershipApplicationResult =
@@ -23,8 +24,20 @@ export async function applyForMembership(
       fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
     };
   }
-  const { name, email, phone, whatsapp, churchAffiliation, membershipType, reason, password } =
-    parsed.data;
+  const {
+    name,
+    phone,
+    email,
+    businessOrProfession,
+    churchAffiliation,
+    membershipCategory,
+    password,
+  } = parsed.data;
+
+  const category = getMembershipCategory(membershipCategory);
+  if (!category) {
+    return { ok: false, error: "Please select a membership category." };
+  }
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -38,16 +51,17 @@ export async function applyForMembership(
       name,
       email,
       phone,
-      whatsapp: whatsapp || null,
       passwordHash,
       role: "MEMBER",
       status: "PENDING",
       memberProfile: {
         create: {
           membershipStatus: "PENDING",
-          membershipType,
+          membershipType: category.type,
+          membershipCategory: category.value,
+          businessOrProfession,
           churchAffiliation,
-          bio: reason,
+          bio: `Applied as: ${category.label} (annual fee CI$${category.feeKyd}). Commitment accepted.`,
         },
       },
     },
