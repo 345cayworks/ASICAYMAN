@@ -3,6 +3,8 @@ import { ArrowRight, Briefcase, Ticket, Gift, CheckCircle2, AlertCircle, Clock }
 import { requireUser } from "@/lib/rbac";
 import { prisma } from "@/lib/db";
 import { formatDollars } from "@/lib/pricing";
+import { AdBanner } from "@/components/ads/variants";
+import { AD_PLACEMENTS } from "@/components/ads/placements";
 
 interface Props {
   searchParams: Promise<{ welcome?: string }>;
@@ -52,6 +54,8 @@ export default async function DashboardHome({ searchParams }: Props) {
         </h1>
         <p className="mt-2 text-[color:var(--color-navy-700)]">Here's an overview of your ASI Cayman account.</p>
       </header>
+
+      <AdBanner placement={AD_PLACEMENTS.dashboardTop} userRole={sessionUser.role} />
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatusCard

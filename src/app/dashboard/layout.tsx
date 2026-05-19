@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/rbac";
 import { SignOutButton } from "@/components/site/sign-out-button";
+import { SponsoredCard } from "@/components/ads/variants";
+import { AD_PLACEMENTS } from "@/components/ads/placements";
 import { Home, User, Briefcase, Ticket, Gift, ShieldCheck } from "lucide-react";
 
 const navItems = [
@@ -55,6 +57,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <p className="text-xs text-[color:var(--color-navy-600)] truncate">{user.email}</p>
 
             <SignOutButton className="mt-4 flex items-center gap-2 text-sm text-[color:var(--color-navy-700)] hover:text-[color:var(--color-navy-900)] disabled:opacity-60" />
+          </div>
+
+          <div className="mt-6 hidden lg:block">
+            <SponsoredCard placement={AD_PLACEMENTS.sidebar} userRole={user.role} />
           </div>
         </aside>
 

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Calendar, MapPin, Clock, ArrowRight, CheckCircle2 } from "lucide-react";
 import { SectionHeader } from "@/components/site/section-header";
 import { SITE } from "@/lib/utils";
+import { AdBanner } from "@/components/ads/variants";
+import { AD_PLACEMENTS } from "@/components/ads/placements";
 
 export const metadata = { title: "Business & Career Expo 2026" };
 
@@ -97,6 +99,10 @@ export default function ExpoPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 lg:px-8 pb-4">
+        <AdBanner placement={AD_PLACEMENTS.expoBanner} userRole="GUEST" />
       </section>
 
       {/* Exhibitor info */}

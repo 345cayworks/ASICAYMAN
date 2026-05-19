@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Search, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { SectionHeader } from "@/components/site/section-header";
+import { NativeAd } from "@/components/ads/variants";
+import { AD_PLACEMENTS } from "@/components/ads/placements";
 
 export const metadata = { title: "Business Directory" };
 export const dynamic = "force-dynamic";
@@ -73,6 +75,11 @@ export default async function DirectoryPage({ searchParams }: Props) {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 lg:px-8 pb-24">
+        <NativeAd
+          placement={AD_PLACEMENTS.directoryInline}
+          userRole="GUEST"
+          className="mb-6"
+        />
         {listings.length === 0 ? (
           <EmptyState />
         ) : (

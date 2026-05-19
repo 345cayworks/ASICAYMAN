@@ -195,6 +195,34 @@ Payment status moves through: `PENDING` → `RECEIPT_UPLOADED` → `VERIFIED`/`P
 - **`trustHost: true`** is set in code (`src/lib/auth.config.ts`) so Auth.js works on Netlify even if `AUTH_TRUST_HOST` is not set as an env var.
 - Passwords hashed with bcrypt (cost 12); receipts limited to 8 MB and JPG/PNG/HEIC/WEBP/PDF only.
 
+## Cayworks Ad Engine integration
+
+Ads are served by the central Cayworks Ad Engine and rendered via the
+dependency-free `<AdSlot />` component (`src/components/ads/`), with
+`AdBanner` / `SponsoredCard` / `NativeAd` presets.
+
+- **Env var:** `AD_ENGINE_KEY` (secret) — set in Netlify env only. Optional:
+  `AD_ENGINE_BASE_URL` (default `https://ads.cayworks.com`),
+  `AD_ENGINE_PLATFORM` (default `asicayman`). The key is read only in
+  `src/lib/ad-engine.ts` and **never** reaches client JS, the bundle, or a URL.
+- **Server proxy:** the client calls our own `GET /internal/ads/serve` and
+  `POST /internal/ads/{impression,click}` (`src/app/internal/ads/*`), which
+  attach the `X-Ad-Engine-Key` header and forward to the engine. Impressions
+  fire via `navigator.sendBeacon` once a slot is ≥50% visible; clicks open the
+  engine's sanitized `destinationUrl` in a new tab (`rel="noopener noreferrer
+  sponsored"`). A stable `anonymousUserId` is kept in `localStorage`.
+- **Placements:** `asi_dashboard_top` (banner, top of member dashboard),
+  `asi_sidebar` (card, dashboard right rail), `asi_directory_inline` (native,
+  public business directory), `asi_expo_banner` (banner, public Expo page).
+  Keys live in `src/components/ads/placements.ts`.
+- **Graceful by design:** if `AD_ENGINE_KEY` is unset or the engine is
+  unreachable, every slot renders nothing and pages work normally — ads never
+  block render or throw into the host page.
+- **Testing:** set `AD_ENGINE_KEY` in Netlify (or `.env` locally), open a page
+  with a slot, scroll it into view → an ad appears and an impression is
+  recorded; click it → the advertiser URL opens. Remove the key → pages render
+  with the ad areas simply absent.
+
 ## What's next (Sprint 2+)
 
 See `QA_CHECKLIST.md` for the manual test plan, and refer to the original brief for Sprint 2–5 scope:
