@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/rbac";
 import { SignOutButton } from "@/components/site/sign-out-button";
-import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, Activity, ArrowLeft } from "lucide-react";
 
 const adminNav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
@@ -10,6 +10,7 @@ const adminNav = [
   { href: "/admin/registrations", label: "Expo registrations", icon: Ticket },
   { href: "/admin/receipts", label: "Receipts", icon: Receipt },
   { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
+  { href: "/admin/ads-test", label: "Ad engine test", icon: Activity },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
