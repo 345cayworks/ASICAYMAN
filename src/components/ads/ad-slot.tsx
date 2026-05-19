@@ -175,7 +175,7 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="group relative block overflow-hidden rounded-xl border border-[color:var(--color-navy-100)] bg-white"
         >
-          <AdMedia ad={ad} imgClassName="w-full h-auto object-cover" />
+          <AdMedia ad={ad} banner imgClassName="w-full max-h-[280px] object-cover" />
           <div className="flex items-center justify-between gap-4 px-5 py-3">
             <div className="min-w-0">
               {ad.title && (
@@ -286,15 +286,28 @@ function youTubeEmbed(url: string): string | null {
   return null;
 }
 
-function AdMedia({ ad, imgClassName }: { ad: Ad; imgClassName: string }) {
+function AdMedia({
+  ad,
+  imgClassName,
+  banner = false,
+}: {
+  ad: Ad;
+  imgClassName: string;
+  banner?: boolean;
+}) {
   if (ad.videoUrl) {
     const embed = youTubeEmbed(ad.videoUrl);
+    // Banner slots cap height (and center via mx-auto) so off-spec creatives
+    // don't dominate the column.
+    const videoClass = banner
+      ? "w-full aspect-video max-h-[280px] mx-auto bg-black"
+      : "w-full aspect-video bg-black";
     if (embed) {
       return (
         <iframe
           src={embed}
           title={ad.title ?? "Advertisement"}
-          className="w-full aspect-video border-0"
+          className={`${videoClass} border-0`}
           allow="accelerometer; encrypted-media; picture-in-picture"
           allowFullScreen
           loading="lazy"
@@ -304,7 +317,7 @@ function AdMedia({ ad, imgClassName }: { ad: Ad; imgClassName: string }) {
     return (
       <video
         src={ad.videoUrl}
-        className="w-full aspect-video object-cover bg-black"
+        className={`${videoClass} object-cover`}
         controls
         muted
         playsInline
