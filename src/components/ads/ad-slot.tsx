@@ -175,15 +175,7 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="group relative block overflow-hidden rounded-xl border border-[color:var(--color-navy-100)] bg-white"
         >
-          {ad.imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={ad.imageUrl}
-              alt={ad.title ?? "Advertisement"}
-              className="w-full h-auto object-cover"
-              loading="lazy"
-            />
-          )}
+          <AdMedia ad={ad} imgClassName="w-full h-auto object-cover" />
           <div className="flex items-center justify-between gap-4 px-5 py-3">
             <div className="min-w-0">
               {ad.title && (
@@ -215,15 +207,7 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="card relative block overflow-hidden hover:border-[color:var(--color-navy-300)] transition-colors"
         >
-          {ad.imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={ad.imageUrl}
-              alt={ad.title ?? "Advertisement"}
-              className="w-full h-32 object-cover"
-              loading="lazy"
-            />
-          )}
+          <AdMedia ad={ad} imgClassName="w-full h-32 object-cover" />
           <div className="p-5">
             {ad.title && <p className="font-display text-base">{ad.title}</p>}
             {ad.description && (
@@ -282,6 +266,64 @@ export function AdSlot({
       )}
     </div>
   );
+}
+
+function youTubeEmbed(url: string): string | null {
+  try {
+    const u = new URL(url);
+    if (u.hostname === "youtu.be") {
+      const id = u.pathname.slice(1);
+      return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+    }
+    if (u.hostname.endsWith("youtube.com")) {
+      const v = u.searchParams.get("v");
+      if (v) return `https://www.youtube-nocookie.com/embed/${v}`;
+      if (u.pathname.startsWith("/embed/")) return url;
+    }
+  } catch {
+    /* not a parseable URL */
+  }
+  return null;
+}
+
+function AdMedia({ ad, imgClassName }: { ad: Ad; imgClassName: string }) {
+  if (ad.videoUrl) {
+    const embed = youTubeEmbed(ad.videoUrl);
+    if (embed) {
+      return (
+        <iframe
+          src={embed}
+          title={ad.title ?? "Advertisement"}
+          className="w-full aspect-video border-0"
+          allow="accelerometer; encrypted-media; picture-in-picture"
+          allowFullScreen
+          loading="lazy"
+        />
+      );
+    }
+    return (
+      <video
+        src={ad.videoUrl}
+        className="w-full aspect-video object-cover bg-black"
+        controls
+        muted
+        playsInline
+        preload="metadata"
+      />
+    );
+  }
+  if (ad.imageUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={ad.imageUrl}
+        alt={ad.title ?? "Advertisement"}
+        className={imgClassName}
+        loading="lazy"
+      />
+    );
+  }
+  return null;
 }
 
 function AdLabel({ label }: { label: string }) {
