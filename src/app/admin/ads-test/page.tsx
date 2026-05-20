@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/rbac";
+import { requireSuperadmin } from "@/lib/rbac";
 import {
   adEngineFetch,
   adsConfigured,
@@ -93,7 +93,7 @@ export default async function AdsTestPage({
 }: {
   searchParams: Search;
 }) {
-  await requireAdmin();
+  await requireSuperadmin();
   const { placement: pParam, role: rParam } = await searchParams;
   const placement: string = (PLACEMENT_OPTIONS as readonly string[]).includes(
     pParam ?? "",

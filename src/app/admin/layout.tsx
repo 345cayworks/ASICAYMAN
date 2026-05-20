@@ -1,16 +1,17 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/rbac";
 import { SignOutButton } from "@/components/site/sign-out-button";
-import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, Activity, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, Activity, Settings, ArrowLeft } from "lucide-react";
 
 const adminNav = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/members", label: "Members", icon: Users },
-  { href: "/admin/listings", label: "Listings", icon: Briefcase },
-  { href: "/admin/registrations", label: "Expo registrations", icon: Ticket },
-  { href: "/admin/receipts", label: "Receipts", icon: Receipt },
-  { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
-  { href: "/admin/ads-test", label: "Ad engine test", icon: Activity },
+  { href: "/admin", label: "Overview", icon: LayoutDashboard, superOnly: false },
+  { href: "/admin/members", label: "Members", icon: Users, superOnly: false },
+  { href: "/admin/listings", label: "Listings", icon: Briefcase, superOnly: false },
+  { href: "/admin/registrations", label: "Expo registrations", icon: Ticket, superOnly: false },
+  { href: "/admin/receipts", label: "Receipts", icon: Receipt, superOnly: false },
+  { href: "/admin/announcements", label: "Announcements", icon: Megaphone, superOnly: false },
+  { href: "/admin/ads-test", label: "Ad engine test", icon: Activity, superOnly: true },
+  { href: "/admin/settings", label: "Settings", icon: Settings, superOnly: true },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -33,7 +34,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <p className="pl-12 -mt-0.5 text-xs uppercase tracking-[0.18em] text-[color:var(--color-gold-400)]">Admin</p>
 
           <nav className="mt-8 grid gap-0.5">
-            {adminNav.map((item) => (
+            {adminNav.filter((item) => !item.superOnly || user.role === "SUPERADMIN").map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
