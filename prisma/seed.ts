@@ -94,6 +94,22 @@ async function main() {
   }
   console.log(`  ✓ ${benefits.length} benefits seeded`);
 
+  // ---------- Tracking settings (DISABLED by default, empty IDs) ----------
+  // Idempotent: only inserts on first run, never overwrites operator values.
+  const trackingDefaults = [
+    { key: "platform.tracking.enabled", value: "false" },
+    { key: "platform.tracking.ga.id", value: "" },
+    { key: "platform.tracking.fb.pixelId", value: "" },
+  ];
+  for (const s of trackingDefaults) {
+    await prisma.systemSetting.upsert({
+      where: { key: s.key },
+      update: {},
+      create: { key: s.key, value: s.value },
+    });
+  }
+  console.log(`  ✓ tracking settings ensured (disabled, empty IDs)`);
+
   console.log("\n✅ Seed complete.");
   console.log(`   Admin login: ${adminEmail} / ${adminPassword}`);
   console.log("   Change the password immediately after first login.\n");

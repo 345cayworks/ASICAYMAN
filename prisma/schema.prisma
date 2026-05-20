@@ -330,3 +330,27 @@ model ContactMessage {
 
   @@index([handled, createdAt])
 }
+
+// ============================================================
+// Platform back-office: settings store + audit log
+// ============================================================
+
+model SystemSetting {
+  key            String   @id
+  value          String   @db.Text
+  updatedAt      DateTime @updatedAt
+  updatedById    String?
+  updatedByEmail String?
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  actorEmail  String?
+  action      String
+  entity      String?
+  details     Json?
+  createdAt   DateTime @default(now())
+
+  @@index([action, createdAt])
+}
