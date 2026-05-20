@@ -1,17 +1,21 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/rbac";
 import { SignOutButton } from "@/components/site/sign-out-button";
-import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, Activity, Settings, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, Activity, Settings, LineChart, ArrowLeft } from "lucide-react";
 
 const adminNav = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard, superOnly: false },
-  { href: "/admin/members", label: "Members", icon: Users, superOnly: false },
-  { href: "/admin/listings", label: "Listings", icon: Briefcase, superOnly: false },
-  { href: "/admin/registrations", label: "Expo registrations", icon: Ticket, superOnly: false },
-  { href: "/admin/receipts", label: "Receipts", icon: Receipt, superOnly: false },
-  { href: "/admin/announcements", label: "Announcements", icon: Megaphone, superOnly: false },
-  { href: "/admin/ads-test", label: "Ad engine test", icon: Activity, superOnly: true },
-  { href: "/admin/settings", label: "Settings", icon: Settings, superOnly: true },
+  { href: "/admin", label: "Overview", icon: LayoutDashboard },
+  { href: "/admin/members", label: "Members", icon: Users },
+  { href: "/admin/listings", label: "Listings", icon: Briefcase },
+  { href: "/admin/registrations", label: "Expo registrations", icon: Ticket },
+  { href: "/admin/receipts", label: "Receipts", icon: Receipt },
+  { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
+];
+
+// SUPERADMIN-only group, rendered under a "Settings" header.
+const settingsNav = [
+  { href: "/admin/settings", label: "Tracking", icon: LineChart },
+  { href: "/admin/ads-test", label: "Ad engine test", icon: Activity },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -34,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <p className="pl-12 -mt-0.5 text-xs uppercase tracking-[0.18em] text-[color:var(--color-gold-400)]">Admin</p>
 
           <nav className="mt-8 grid gap-0.5">
-            {adminNav.filter((item) => !item.superOnly || user.role === "SUPERADMIN").map((item) => (
+            {adminNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -44,6 +48,28 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 {item.label}
               </Link>
             ))}
+
+            {user.role === "SUPERADMIN" && (
+              <div className="mt-4">
+                <div className="flex items-center gap-2 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-navy-400)]">
+                  <Settings size={12} />
+                  Settings
+                </div>
+                <div className="grid gap-0.5 mt-1">
+                  {settingsNav.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center gap-3 pl-7 pr-3 py-2 rounded-lg text-sm text-[color:var(--color-navy-200)] hover:bg-white/10 hover:text-white transition-colors"
+                    >
+                      <item.icon size={15} />
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <Link
               href="/dashboard"
               className="mt-3 flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[color:var(--color-navy-300)] hover:text-white"

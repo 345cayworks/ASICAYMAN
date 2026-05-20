@@ -24,12 +24,12 @@ export default async function AdminSettingsPage({
   return (
     <div className="grid gap-6">
       <header>
-        <p className="section-eyebrow">SuperAdmin</p>
+        <p className="section-eyebrow">Settings · SuperAdmin</p>
         <h1 className="mt-2 font-display text-3xl md:text-4xl tracking-tight text-white">
-          Settings
+          Tracking
         </h1>
         <p className="mt-2 text-[color:var(--color-navy-300)] text-sm">
-          Platform-level controls. Restricted to SUPERADMIN.
+          Google Analytics and Facebook Pixel for the whole platform.
         </p>
       </header>
 
