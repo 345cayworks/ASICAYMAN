@@ -175,8 +175,12 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="group relative block overflow-hidden rounded-xl border border-[color:var(--color-navy-100)] bg-white"
         >
-          <AdMedia ad={ad} banner imgClassName="w-full max-h-[280px] object-cover" />
-          <div className="flex items-center justify-between gap-4 px-5 py-3">
+          <AdMedia
+            ad={ad}
+            banner
+            imgClassName="w-full object-cover max-h-[140px] sm:max-h-[210px] lg:max-h-[300px]"
+          />
+          <div className="flex items-center justify-between gap-3 sm:gap-4 px-4 sm:px-5 py-3">
             <div className="min-w-0">
               {ad.title && (
                 <p className="font-display text-sm md:text-base truncate">
@@ -207,8 +211,8 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="card relative block overflow-hidden hover:border-[color:var(--color-navy-300)] transition-colors"
         >
-          <AdMedia ad={ad} imgClassName="w-full h-32 object-cover" />
-          <div className="p-5">
+          <AdMedia ad={ad} imgClassName="w-full aspect-[16/9] object-cover" />
+          <div className="p-4 sm:p-5">
             {ad.title && <p className="font-display text-base">{ad.title}</p>}
             {ad.description && (
               <p className="mt-1.5 text-sm text-[color:var(--color-navy-700)] leading-relaxed line-clamp-3">
@@ -238,7 +242,7 @@ export function AdSlot({
             <img
               src={ad.imageUrl}
               alt={ad.title ?? "Advertisement"}
-              className="size-16 rounded-lg object-cover shrink-0"
+              className="size-14 sm:size-16 rounded-lg object-cover shrink-0"
               loading="lazy"
             />
           )}
@@ -297,10 +301,11 @@ function AdMedia({
 }) {
   if (ad.videoUrl) {
     const embed = youTubeEmbed(ad.videoUrl);
-    // Banner slots cap height (and center via mx-auto) so off-spec creatives
-    // don't dominate the column.
+    // aspect-video scales the player with the column width; the responsive
+    // max-height keeps a banner from dominating on large screens while
+    // staying compact on phones. Card/native video just scales with width.
     const videoClass = banner
-      ? "w-full aspect-video max-h-[280px] mx-auto bg-black"
+      ? "w-full aspect-video max-h-[200px] sm:max-h-[280px] lg:max-h-[360px] mx-auto bg-black"
       : "w-full aspect-video bg-black";
     if (embed) {
       return (
