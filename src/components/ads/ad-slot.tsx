@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import type { AdVariant } from "./placements";
 
 interface Ad {
@@ -166,7 +167,10 @@ export function AdSlot({
   const label = ad.label || "Sponsored";
 
   return (
-    <div ref={containerRef} className={className}>
+    // Fill the host slot but never grow it: `min-w-0` overrides the default
+    // `min-width: auto` on grid/flex children so an ad's media or long text can
+    // never widen its column and shift the page. `max-w-full` caps it to the slot.
+    <div ref={containerRef} className={cn("w-full min-w-0 max-w-full", className)}>
       {variant === "banner" && (
         <a
           href={ad.destinationUrl || "#"}
@@ -178,7 +182,7 @@ export function AdSlot({
           <AdMedia
             ad={ad}
             banner
-            imgClassName="w-full h-[120px] sm:h-[180px] lg:h-[240px] object-cover"
+            imgClassName="w-full max-w-full h-[120px] sm:h-[180px] lg:h-[240px] object-cover"
           />
           <div className="flex items-center justify-between gap-3 sm:gap-4 px-4 sm:px-5 py-3">
             <div className="min-w-0">
@@ -211,7 +215,7 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="card relative block overflow-hidden hover:border-[color:var(--color-navy-300)] transition-colors"
         >
-          <AdMedia ad={ad} imgClassName="w-full aspect-[16/9] object-cover" />
+          <AdMedia ad={ad} imgClassName="w-full max-w-full aspect-[16/9] object-cover" />
           <div className="p-4 sm:p-5">
             {ad.title && <p className="font-display text-base">{ad.title}</p>}
             {ad.description && (
@@ -305,8 +309,8 @@ function AdMedia({
     // banner it centers (mx-auto) under a responsive height cap so it
     // scales from phone to desktop without dominating.
     const videoClass = banner
-      ? "w-full aspect-video max-h-[200px] sm:max-h-[280px] lg:max-h-[360px] mx-auto bg-black"
-      : "w-full aspect-video bg-black";
+      ? "w-full max-w-full aspect-video max-h-[200px] sm:max-h-[280px] lg:max-h-[360px] mx-auto bg-black"
+      : "w-full max-w-full aspect-video bg-black";
     if (embed) {
       return (
         <iframe
