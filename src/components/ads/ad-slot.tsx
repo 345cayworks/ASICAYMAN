@@ -178,7 +178,7 @@ export function AdSlot({
           <AdMedia
             ad={ad}
             banner
-            imgClassName="w-full object-cover max-h-[140px] sm:max-h-[210px] lg:max-h-[300px]"
+            imgClassName="w-full h-[120px] sm:h-[180px] lg:h-[240px] object-cover"
           />
           <div className="flex items-center justify-between gap-3 sm:gap-4 px-4 sm:px-5 py-3">
             <div className="min-w-0">
@@ -301,9 +301,9 @@ function AdMedia({
 }) {
   if (ad.videoUrl) {
     const embed = youTubeEmbed(ad.videoUrl);
-    // aspect-video scales the player with the column width; the responsive
-    // max-height keeps a banner from dominating on large screens while
-    // staying compact on phones. Card/native video just scales with width.
+    // Video is always letterboxed: full 16:9 frame, never cropped. In a
+    // banner it centers (mx-auto) under a responsive height cap so it
+    // scales from phone to desktop without dominating.
     const videoClass = banner
       ? "w-full aspect-video max-h-[200px] sm:max-h-[280px] lg:max-h-[360px] mx-auto bg-black"
       : "w-full aspect-video bg-black";
@@ -322,7 +322,7 @@ function AdMedia({
     return (
       <video
         src={ad.videoUrl}
-        className={`${videoClass} object-cover`}
+        className={`${videoClass} object-contain`}
         controls
         muted
         playsInline
