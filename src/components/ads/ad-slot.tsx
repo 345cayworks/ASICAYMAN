@@ -41,12 +41,19 @@ function getAnonymousUserId(): string {
   }
 }
 
+// Default rotation interval for multi-campaign inventory. Per Cayworks
+// platform spec: 15s. Don't go lower without product sign-off — viewability
+// metrics suffer and the UI feels jittery.
+export const AD_ROTATION_INTERVAL_MS = 15_000;
+
 export interface AdSlotProps {
   placement: string;
   userRole?: string;
   category?: string;
   variant?: AdVariant;
   className?: string;
+  /** Override the 15s default. Large hero banners often want 60_000. */
+  rotationMs?: number;
 }
 
 export function AdSlot({
@@ -55,30 +62,62 @@ export function AdSlot({
   category,
   variant = "card",
   className,
+  rotationMs = AD_ROTATION_INTERVAL_MS,
 }: AdSlotProps) {
   const [ad, setAd] = useState<Ad | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const impressionSent = useRef(false);
+  // Tracks the adId we last committed to state. Separate from React state so
+  // async fetch callbacks can compare without stale-closure pitfalls.
+  const currentAdIdRef = useRef<string | null>(null);
 
-  // Fetch the ad async; never throw into the host page.
+  // Fetch on mount, then rotate. Same adId returned → no-op (no re-mount,
+  // no fresh impression). Different adId → swap and reset the impression
+  // sentinel so the new creative earns its own viewability impression.
   useEffect(() => {
-    let active = true;
-    const q = new URLSearchParams({ placement, userRole });
-    if (category) q.set("category", category);
-    if (typeof window !== "undefined") q.set("pageUrl", window.location.href);
+    let cancelled = false;
+    currentAdIdRef.current = null;
+    impressionSent.current = false;
 
-    fetch(`/internal/ads/serve?${q.toString()}`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { ad?: Ad | null } | null) => {
-        if (active && d && d.ad) setAd(d.ad);
-      })
-      .catch(() => {
+    async function fetchAd(isInitial: boolean) {
+      // Skip rotation ticks while the tab is hidden — backgrounded users
+      // shouldn't burn advertiser spend or rotate creatives they can't see.
+      // Initial fetch still runs so foreground users see an ad immediately.
+      if (
+        !isInitial &&
+        typeof document !== "undefined" &&
+        document.hidden
+      ) {
+        return;
+      }
+      const q = new URLSearchParams({ placement, userRole });
+      if (category) q.set("category", category);
+      if (typeof window !== "undefined")
+        q.set("pageUrl", window.location.href);
+      try {
+        const r = await fetch(`/internal/ads/serve?${q.toString()}`, {
+          cache: "no-store",
+        });
+        if (!r.ok) return;
+        const d = (await r.json()) as { ad?: Ad | null } | null;
+        const next = d?.ad ?? null;
+        if (cancelled || !next) return; // null → keep current (resilient)
+        if (currentAdIdRef.current === next.adId) return; // same → noop
+        currentAdIdRef.current = next.adId;
+        impressionSent.current = false;
+        setAd(next);
+      } catch {
         /* fail silent */
-      });
+      }
+    }
+
+    fetchAd(true);
+    const intervalId = setInterval(() => fetchAd(false), rotationMs);
     return () => {
-      active = false;
+      cancelled = true;
+      clearInterval(intervalId);
     };
-  }, [placement, userRole, category]);
+  }, [placement, userRole, category, rotationMs]);
 
   // Record an impression once the ad is >=50% visible.
   useEffect(() => {
