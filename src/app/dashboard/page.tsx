@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { formatDollars } from "@/lib/pricing";
 import { AdBanner } from "@/components/ads/variants";
 import { AD_PLACEMENTS } from "@/components/ads/placements";
+import { PageWithRightColumn } from "@/components/ads/page-with-right-column";
 
 interface Props {
   searchParams: Promise<{ welcome?: string }>;
@@ -34,7 +35,11 @@ export default async function DashboardHome({ searchParams }: Props) {
   const business = user.businessListings[0];
 
   return (
-    <div className="grid gap-6">
+    <PageWithRightColumn
+      adPlacement={AD_PLACEMENTS.memberDashboardRight}
+      fallbackVariant="member"
+      userRole={sessionUser.role}
+    >
       {welcome && (
         <div className="card p-5 bg-[color:var(--color-gold-50)] border-[color:var(--color-gold-200)] flex gap-3 items-start">
           <CheckCircle2 size={20} className="text-[color:var(--color-gold-700)] mt-0.5" />
@@ -149,7 +154,7 @@ export default async function DashboardHome({ searchParams }: Props) {
           </Link>
         </div>
       </section>
-    </div>
+    </PageWithRightColumn>
   );
 }
 

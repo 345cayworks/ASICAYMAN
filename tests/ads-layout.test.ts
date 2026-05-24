@@ -223,6 +223,85 @@ test("AdSlot resets the impression sentinel only when adId changes", () => {
 });
 
 // ============================================================
+// Page inclusion / exclusion (Tier 1: paid placement)
+// ============================================================
+
+const WRAPPER_IMPORT =
+  /from\s+["']@\/components\/ads\/page-with-right-column["']/;
+
+test("/dashboard wraps with PageWithRightColumn + memberDashboardRight", () => {
+  const src = read("src/app/dashboard/page.tsx");
+  assert.match(src, WRAPPER_IMPORT);
+  assert.match(
+    src,
+    /AD_PLACEMENTS\.memberDashboardRight/,
+    "/dashboard must target the member dashboard placement",
+  );
+  assert.match(
+    src,
+    /fallbackVariant=["']member["']/,
+    "/dashboard must use the member fallback variant",
+  );
+});
+
+test("/directory wraps with PageWithRightColumn + guestDirectoryRight", () => {
+  const src = read("src/app/directory/page.tsx");
+  assert.match(src, WRAPPER_IMPORT);
+  assert.match(
+    src,
+    /AD_PLACEMENTS\.guestDirectoryRight/,
+    "/directory must target the guest directory placement",
+  );
+  assert.match(
+    src,
+    /fallbackVariant=["']guest["']/,
+    "/directory must use the guest fallback variant",
+  );
+  assert.ok(
+    !/import\s*\{[^}]*\bNativeAd\b[^}]*\}\s*from\s*["']@\/components\/ads\/variants["']/.test(
+      src,
+    ),
+    "/directory's inline NativeAd is replaced by the right-rail wrapper",
+  );
+});
+
+// ============================================================
+// Sensitive page exclusions (negative assertions — lock these in)
+// ============================================================
+
+test("Sensitive pages do NOT import PageWithRightColumn", () => {
+  const EXCLUDED = [
+    // Auth — focus matters
+    "src/app/auth/signin/page.tsx",
+    "src/app/auth/signup/page.tsx",
+    // Payment-adjacent — never put ads near a money flow
+    "src/app/expo/register/page.tsx",
+    "src/app/dashboard/registration/page.tsx",
+    // Account settings / composer
+    "src/app/dashboard/profile/page.tsx",
+    "src/app/dashboard/business/page.tsx",
+    // Onboarding wizard
+    "src/app/membership/apply/page.tsx",
+    // Admin tools (different audience context)
+    "src/app/admin/page.tsx",
+    "src/app/admin/settings/page.tsx",
+    "src/app/admin/members/page.tsx",
+    "src/app/admin/listings/page.tsx",
+    "src/app/admin/registrations/page.tsx",
+    "src/app/admin/receipts/page.tsx",
+    "src/app/admin/announcements/page.tsx",
+    "src/app/admin/ads-test/page.tsx",
+  ];
+  for (const file of EXCLUDED) {
+    const src = read(file);
+    assert.ok(
+      !WRAPPER_IMPORT.test(src),
+      `${file} must NOT import PageWithRightColumn (sensitive / excluded page)`,
+    );
+  }
+});
+
+// ============================================================
 // Settings status panel
 // ============================================================
 
