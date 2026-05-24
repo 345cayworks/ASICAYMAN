@@ -1,18 +1,19 @@
 import { ExternalLink, Gift } from "lucide-react";
 import { requireUser } from "@/lib/rbac";
 import { prisma } from "@/lib/db";
+import { PageWithRightColumn } from "@/components/ads/page-with-right-column";
 
 export const metadata = { title: "Member benefits" };
 
 export default async function BenefitsPage() {
-  await requireUser();
+  const user = await requireUser();
   const benefits = await prisma.benefit.findMany({
     where: { status: "ACTIVE" },
     orderBy: { createdAt: "asc" },
   });
 
   return (
-    <div className="grid gap-6">
+    <PageWithRightColumn fallbackVariant="member" userRole={user.role}>
       <header>
         <p className="section-eyebrow">Member benefits</p>
         <h1 className="mt-2 font-display text-3xl tracking-tight">Your membership in action</h1>
@@ -49,6 +50,6 @@ export default async function BenefitsPage() {
           ))}
         </div>
       )}
-    </div>
+    </PageWithRightColumn>
   );
 }

@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { requireSuperadmin } from "@/lib/rbac";
 import { getTrackingSettings } from "@/lib/tracking";
+import { adsConfigured, AD_ENGINE_PLATFORM } from "@/lib/ad-engine";
+import { AD_PLACEMENTS } from "@/components/ads/placements";
 import { updateTrackingSettings } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -136,6 +139,57 @@ export default async function AdminSettingsPage({
           </div>
         </form>
       </section>
+
+      <AdsStatusPanel />
     </div>
+  );
+}
+
+function AdsStatusPanel() {
+  const placements = Object.entries(AD_PLACEMENTS) as [string, string][];
+  const configured = adsConfigured();
+  return (
+    <section className="card bg-white text-[color:var(--color-navy-900)] p-6">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 className="font-display text-xl">Ad placements</h2>
+          <p className="mt-1 text-sm text-[color:var(--color-navy-600)] max-w-prose">
+            Registered placement keys for the Cayworks Ad Engine on the{" "}
+            <code>{AD_ENGINE_PLATFORM}</code> platform. Campaigns, creatives,
+            and targeting live in the engine — not in this codebase.
+          </p>
+        </div>
+        <span
+          className={`badge shrink-0 ${configured ? "badge-approved" : "badge-rejected"}`}
+        >
+          {configured ? "Engine configured" : "AD_ENGINE_KEY unset"}
+        </span>
+      </div>
+
+      <p className="mt-4 text-xs text-[color:var(--color-navy-500)]">
+        {placements.length} placement{placements.length === 1 ? "" : "s"}{" "}
+        registered.
+      </p>
+      <ul className="mt-3 grid gap-1.5 text-sm font-mono">
+        {placements.map(([key, value]) => (
+          <li
+            key={key}
+            className="flex items-baseline gap-3 border-b border-[color:var(--color-navy-100)] pb-1.5 last:border-0"
+          >
+            <span className="text-[color:var(--color-navy-600)]">{key}</span>
+            <span className="text-[color:var(--color-navy-900)] truncate">
+              {value}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <Link
+        href="/admin/ads-test"
+        className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-navy-900)] hover:text-[color:var(--color-gold-600)]"
+      >
+        Open ad engine test →
+      </Link>
+    </section>
   );
 }

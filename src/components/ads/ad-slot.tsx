@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import type { AdVariant } from "./placements";
 
 interface Ad {
@@ -40,12 +41,19 @@ function getAnonymousUserId(): string {
   }
 }
 
+// Default rotation interval for multi-campaign inventory. Per Cayworks
+// platform spec: 15s. Don't go lower without product sign-off — viewability
+// metrics suffer and the UI feels jittery.
+export const AD_ROTATION_INTERVAL_MS = 15_000;
+
 export interface AdSlotProps {
   placement: string;
   userRole?: string;
   category?: string;
   variant?: AdVariant;
   className?: string;
+  /** Override the 15s default. Large hero banners often want 60_000. */
+  rotationMs?: number;
 }
 
 export function AdSlot({
@@ -54,30 +62,62 @@ export function AdSlot({
   category,
   variant = "card",
   className,
+  rotationMs = AD_ROTATION_INTERVAL_MS,
 }: AdSlotProps) {
   const [ad, setAd] = useState<Ad | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const impressionSent = useRef(false);
+  // Tracks the adId we last committed to state. Separate from React state so
+  // async fetch callbacks can compare without stale-closure pitfalls.
+  const currentAdIdRef = useRef<string | null>(null);
 
-  // Fetch the ad async; never throw into the host page.
+  // Fetch on mount, then rotate. Same adId returned → no-op (no re-mount,
+  // no fresh impression). Different adId → swap and reset the impression
+  // sentinel so the new creative earns its own viewability impression.
   useEffect(() => {
-    let active = true;
-    const q = new URLSearchParams({ placement, userRole });
-    if (category) q.set("category", category);
-    if (typeof window !== "undefined") q.set("pageUrl", window.location.href);
+    let cancelled = false;
+    currentAdIdRef.current = null;
+    impressionSent.current = false;
 
-    fetch(`/internal/ads/serve?${q.toString()}`, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { ad?: Ad | null } | null) => {
-        if (active && d && d.ad) setAd(d.ad);
-      })
-      .catch(() => {
+    async function fetchAd(isInitial: boolean) {
+      // Skip rotation ticks while the tab is hidden — backgrounded users
+      // shouldn't burn advertiser spend or rotate creatives they can't see.
+      // Initial fetch still runs so foreground users see an ad immediately.
+      if (
+        !isInitial &&
+        typeof document !== "undefined" &&
+        document.hidden
+      ) {
+        return;
+      }
+      const q = new URLSearchParams({ placement, userRole });
+      if (category) q.set("category", category);
+      if (typeof window !== "undefined")
+        q.set("pageUrl", window.location.href);
+      try {
+        const r = await fetch(`/internal/ads/serve?${q.toString()}`, {
+          cache: "no-store",
+        });
+        if (!r.ok) return;
+        const d = (await r.json()) as { ad?: Ad | null } | null;
+        const next = d?.ad ?? null;
+        if (cancelled || !next) return; // null → keep current (resilient)
+        if (currentAdIdRef.current === next.adId) return; // same → noop
+        currentAdIdRef.current = next.adId;
+        impressionSent.current = false;
+        setAd(next);
+      } catch {
         /* fail silent */
-      });
+      }
+    }
+
+    fetchAd(true);
+    const intervalId = setInterval(() => fetchAd(false), rotationMs);
     return () => {
-      active = false;
+      cancelled = true;
+      clearInterval(intervalId);
     };
-  }, [placement, userRole, category]);
+  }, [placement, userRole, category, rotationMs]);
 
   // Record an impression once the ad is >=50% visible.
   useEffect(() => {
@@ -166,7 +206,10 @@ export function AdSlot({
   const label = ad.label || "Sponsored";
 
   return (
-    <div ref={containerRef} className={className}>
+    // Fill the host slot but never grow it: `min-w-0` overrides the default
+    // `min-width: auto` on grid/flex children so an ad's media or long text can
+    // never widen its column and shift the page. `max-w-full` caps it to the slot.
+    <div ref={containerRef} className={cn("w-full min-w-0 max-w-full", className)}>
       {variant === "banner" && (
         <a
           href={ad.destinationUrl || "#"}
@@ -178,7 +221,7 @@ export function AdSlot({
           <AdMedia
             ad={ad}
             banner
-            imgClassName="w-full h-[120px] sm:h-[180px] lg:h-[240px] object-cover"
+            imgClassName="w-full max-w-full h-[120px] sm:h-[180px] lg:h-[240px] object-cover"
           />
           <div className="flex items-center justify-between gap-3 sm:gap-4 px-4 sm:px-5 py-3">
             <div className="min-w-0">
@@ -211,7 +254,7 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="card relative block overflow-hidden hover:border-[color:var(--color-navy-300)] transition-colors"
         >
-          <AdMedia ad={ad} imgClassName="w-full aspect-[16/9] object-cover" />
+          <AdMedia ad={ad} imgClassName="w-full max-w-full aspect-[16/9] object-cover" />
           <div className="p-4 sm:p-5">
             {ad.title && <p className="font-display text-base">{ad.title}</p>}
             {ad.description && (
@@ -305,8 +348,8 @@ function AdMedia({
     // banner it centers (mx-auto) under a responsive height cap so it
     // scales from phone to desktop without dominating.
     const videoClass = banner
-      ? "w-full aspect-video max-h-[200px] sm:max-h-[280px] lg:max-h-[360px] mx-auto bg-black"
-      : "w-full aspect-video bg-black";
+      ? "w-full max-w-full aspect-video max-h-[200px] sm:max-h-[280px] lg:max-h-[360px] mx-auto bg-black"
+      : "w-full max-w-full aspect-video bg-black";
     if (embed) {
       return (
         <iframe

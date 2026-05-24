@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Search, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { SectionHeader } from "@/components/site/section-header";
-import { NativeAd } from "@/components/ads/variants";
 import { AD_PLACEMENTS } from "@/components/ads/placements";
+import { PageWithRightColumn } from "@/components/ads/page-with-right-column";
 
 export const metadata = { title: "Business Directory" };
 export const dynamic = "force-dynamic";
@@ -75,49 +75,49 @@ export default async function DirectoryPage({ searchParams }: Props) {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 lg:px-8 pb-24">
-        <NativeAd
-          placement={AD_PLACEMENTS.directoryInline}
-          userRole="GUEST"
-          className="mb-6"
-        />
-        {listings.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {listings.map((l) => (
-              <article key={l.id} className="card p-6 flex flex-col">
-                <div className="flex items-center gap-3">
-                  <div className="size-12 rounded-xl bg-gradient-to-br from-[color:var(--color-gold-200)] to-[color:var(--color-gold-400)] flex items-center justify-center font-display text-lg text-[color:var(--color-navy-900)]">
-                    {l.businessName[0]?.toUpperCase() ?? "·"}
+        <PageWithRightColumn
+          adPlacement={AD_PLACEMENTS.guestDirectoryRight}
+          fallbackVariant="guest"
+        >
+          {listings.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-5">
+              {listings.map((l) => (
+                <article key={l.id} className="card p-6 flex flex-col">
+                  <div className="flex items-center gap-3">
+                    <div className="size-12 rounded-xl bg-gradient-to-br from-[color:var(--color-gold-200)] to-[color:var(--color-gold-400)] flex items-center justify-center font-display text-lg text-[color:var(--color-navy-900)]">
+                      {l.businessName[0]?.toUpperCase() ?? "·"}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-display text-lg leading-tight truncate">{l.businessName}</h3>
+                      <p className="text-xs text-[color:var(--color-navy-600)]">{l.category}</p>
+                    </div>
+                    {l.isFeatured && <span className="badge badge-pending ml-auto">Featured</span>}
                   </div>
-                  <div className="min-w-0">
-                    <h3 className="font-display text-lg leading-tight truncate">{l.businessName}</h3>
-                    <p className="text-xs text-[color:var(--color-navy-600)]">{l.category}</p>
-                  </div>
-                  {l.isFeatured && <span className="badge badge-pending ml-auto">Featured</span>}
-                </div>
-                <p className="mt-4 text-sm text-[color:var(--color-navy-700)] leading-relaxed line-clamp-3">
-                  {l.description}
-                </p>
-                {l.specialOffer && (
-                  <p className="mt-3 text-xs px-3 py-2 rounded-md bg-[color:var(--color-gold-50)] text-[color:var(--color-gold-700)] border border-[color:var(--color-gold-200)]">
-                    🎁 {l.specialOffer}
+                  <p className="mt-4 text-sm text-[color:var(--color-navy-700)] leading-relaxed line-clamp-3">
+                    {l.description}
                   </p>
-                )}
-                <div className="mt-auto pt-4 flex items-center justify-between text-sm">
-                  {l.website ? (
-                    <a href={l.website} target="_blank" rel="noreferrer" className="text-[color:var(--color-navy-800)] hover:text-[color:var(--color-gold-600)] inline-flex items-center gap-1">
-                      Visit site <ArrowRight size={14} />
-                    </a>
-                  ) : <span />}
-                  {l.email && (
-                    <a href={`mailto:${l.email}`} className="text-xs text-[color:var(--color-navy-600)] hover:underline">{l.email}</a>
+                  {l.specialOffer && (
+                    <p className="mt-3 text-xs px-3 py-2 rounded-md bg-[color:var(--color-gold-50)] text-[color:var(--color-gold-700)] border border-[color:var(--color-gold-200)]">
+                      🎁 {l.specialOffer}
+                    </p>
                   )}
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
+                  <div className="mt-auto pt-4 flex items-center justify-between text-sm">
+                    {l.website ? (
+                      <a href={l.website} target="_blank" rel="noreferrer" className="text-[color:var(--color-navy-800)] hover:text-[color:var(--color-gold-600)] inline-flex items-center gap-1">
+                        Visit site <ArrowRight size={14} />
+                      </a>
+                    ) : <span />}
+                    {l.email && (
+                      <a href={`mailto:${l.email}`} className="text-xs text-[color:var(--color-navy-600)] hover:underline">{l.email}</a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </PageWithRightColumn>
       </section>
     </>
   );
