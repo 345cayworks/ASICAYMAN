@@ -266,6 +266,24 @@ test("/directory wraps with PageWithRightColumn + guestDirectoryRight", () => {
 });
 
 // ============================================================
+// Page inclusion (Tier 2: house-fallback only)
+// ============================================================
+
+test("/dashboard/benefits wraps with PageWithRightColumn, no paid placement", () => {
+  const src = read("src/app/dashboard/benefits/page.tsx");
+  assert.match(src, WRAPPER_IMPORT);
+  assert.ok(
+    !/adPlacement=/.test(src),
+    "/dashboard/benefits is house-fallback only; no adPlacement should be set",
+  );
+  assert.match(
+    src,
+    /fallbackVariant=["']member["']/,
+    "/dashboard/benefits must use the member fallback variant",
+  );
+});
+
+// ============================================================
 // Sensitive page exclusions (negative assertions — lock these in)
 // ============================================================
 
