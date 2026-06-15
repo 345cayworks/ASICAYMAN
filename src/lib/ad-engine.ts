@@ -42,3 +42,79 @@ export async function adEngineFetch(
     return null;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Host-push placement sync (Option B)
+ *
+ * Push this platform's full placement manifest to the engine so its
+ * AdPlacement rows stay in lockstep with the slots this app actually exposes.
+ * Run intentionally (e.g. `npm run ads:sync`) — it is NOT wired into the build.
+ * The key stays server-side: this uses adEngineFetch, so only call it from
+ * server code / scripts, never the browser.
+ * ------------------------------------------------------------------------- */
+
+export type PlacementType =
+  | "BANNER"
+  | "SIDEBAR"
+  | "CARD"
+  | "NATIVE"
+  | "VIDEO"
+  | "SKYSCRAPER";
+
+export type PlacementManifestEntry = {
+  key: string;
+  name: string;
+  type: PlacementType;
+  description?: string;
+  allowedSizes?: string[];
+};
+
+export type SyncResult = {
+  ok: boolean;
+  platform?: string;
+  synced?: string;
+  pruned?: boolean;
+  created: string[];
+  updated: string[];
+  stale: string[];
+  error?: string;
+};
+
+/**
+ * Reconcile the engine's AdPlacement rows with `placements`. Returns which
+ * keys the engine created/updated, plus any it has that aren't in the
+ * manifest (`stale`). Pass { prune: true } to deactivate the stale set;
+ * otherwise stale is informational only. Defaults to a non-destructive sync.
+ */
+export async function syncPlacements(
+  placements: PlacementManifestEntry[],
+  opts: { prune?: boolean } = {},
+): Promise<SyncResult> {
+  const path = `/api/platforms/sync-placements${opts.prune ? "?prune=1" : ""}`;
+  const res = await adEngineFetch(path, {
+    method: "POST",
+    body: JSON.stringify({ platform: AD_ENGINE_PLATFORM, placements }),
+  });
+  if (!res) {
+    return { ok: false, created: [], updated: [], stale: [], error: "Ads not configured or engine unreachable" };
+  }
+  const body = (await res.json().catch(() => ({}))) as Partial<SyncResult>;
+  if (!res.ok) {
+    return {
+      ok: false,
+      created: [],
+      updated: [],
+      stale: [],
+      error: body.error ?? `HTTP ${res.status}`,
+    };
+  }
+  return {
+    ok: true,
+    platform: body.platform,
+    synced: body.synced,
+    pruned: body.pruned,
+    created: body.created ?? [],
+    updated: body.updated ?? [],
+    stale: body.stale ?? [],
+  };
+}

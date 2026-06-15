@@ -94,6 +94,12 @@ export function AdSlot({
       if (category) q.set("category", category);
       if (typeof window !== "undefined")
         q.set("pageUrl", window.location.href);
+      // Best-effort size + variant hints so the engine can lazy-register an
+      // unknown placement key with sensible defaults seeded in (Option C).
+      q.set("variant", variant);
+      const box = containerRef.current?.getBoundingClientRect();
+      if (box?.width) q.set("w", String(Math.round(box.width)));
+      if (box?.height) q.set("h", String(Math.round(box.height)));
       try {
         const r = await fetch(`/internal/ads/serve?${q.toString()}`, {
           cache: "no-store",
@@ -117,7 +123,7 @@ export function AdSlot({
       cancelled = true;
       clearInterval(intervalId);
     };
-  }, [placement, userRole, category, rotationMs]);
+  }, [placement, userRole, category, rotationMs, variant]);
 
   // Record an impression once the ad is >=50% visible.
   useEffect(() => {
