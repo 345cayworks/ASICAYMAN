@@ -12,6 +12,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
+    "ads:sync": "tsx scripts/sync-placements.ts",
     "test": "node --import tsx --test tests/*.test.ts"
   },
   "prisma": {
