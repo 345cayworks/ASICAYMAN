@@ -86,8 +86,8 @@ export default async function DashboardHome({ searchParams }: Props) {
           </h3>
           <p className="mt-3 text-sm text-[color:var(--color-navy-700)]">
             {business
-              ? `Status: ${business.status.toLowerCase()}. Approved listings appear in the public marketplace.`
-              : "Add your business to the marketplace so the community can find you."}
+              ? `Status: ${business.status.toLowerCase()}. Approved listings appear in the public community directory.`
+              : "Add your business so the community can find you."}
           </p>
           <Link
             href="/dashboard/business"
@@ -98,10 +98,10 @@ export default async function DashboardHome({ searchParams }: Props) {
         </div>
 
         <div className="card p-6">
-          <p className="section-eyebrow">Public marketplace</p>
+          <p className="section-eyebrow">Community directory</p>
           <h3 className="mt-2 font-display text-xl flex items-center gap-2">
             <Compass size={18} className="text-[color:var(--color-gold-600)]" />
-            Browse the marketplace
+            Browse the directory
           </h3>
           <p className="mt-3 text-sm text-[color:var(--color-navy-700)]">
             See how your listing appears alongside other Adventist-owned businesses across the Cayman Islands.
@@ -110,7 +110,7 @@ export default async function DashboardHome({ searchParams }: Props) {
             href="/directory"
             className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-navy-900)] hover:text-[color:var(--color-gold-600)]"
           >
-            Open the marketplace <ArrowRight size={14} />
+            Open the directory <ArrowRight size={14} />
           </Link>
         </div>
       </section>
@@ -127,7 +127,7 @@ export default async function DashboardHome({ searchParams }: Props) {
             <p className="mt-1 text-xs text-[color:var(--color-navy-600)]">What your membership unlocks</p>
           </Link>
           <Link href="/directory" className="p-4 rounded-lg border border-[color:var(--color-navy-100)] hover:border-[color:var(--color-navy-800)] transition-colors">
-            <p className="font-medium text-[color:var(--color-navy-900)]">Public marketplace</p>
+            <p className="font-medium text-[color:var(--color-navy-900)]">Public directory</p>
             <p className="mt-1 text-xs text-[color:var(--color-navy-600)]">See how your listing appears</p>
           </Link>
         </div>

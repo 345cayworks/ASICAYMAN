@@ -52,9 +52,13 @@ export default function ContactPage() {
           </div>
 
           <div className="card p-6 bg-[color:var(--color-cream)]/60">
-            <p className="section-eyebrow">For exhibitors</p>
+            <p className="section-eyebrow">List your business</p>
             <p className="mt-3 text-sm text-[color:var(--color-navy-700)] leading-relaxed">
-              For Expo 2026 booth questions, please use the <a href="/expo/register" className="underline underline-offset-4">registration form</a> — it captures the details we need.
+              Adventist-owned business in the Cayman Islands? Start with our{" "}
+              <a href="/membership/apply" className="underline underline-offset-4">
+                membership application
+              </a>{" "}
+              — it captures the details we need to add you to the directory.
             </p>
           </div>
         </aside>

@@ -11,19 +11,19 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 lg:px-8 pt-16 md:pt-24 pb-20">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7">
-              <p className="section-eyebrow rise rise-1">Adventist Business Marketplace · Cayman Islands</p>
+              <p className="section-eyebrow rise rise-1">Adventist Business Community · Cayman Islands</p>
               <h1 className="rise rise-2 mt-4 text-4xl md:text-5xl lg:text-6xl font-display leading-[1.05] tracking-tight">
-                A marketplace of <span className="italic text-[color:var(--color-gold-600)]">Adventist</span>
+                A community of <span className="italic text-[color:var(--color-gold-600)]">Adventist</span>
                 <br className="hidden md:block" /> businesses & professionals
               </h1>
               <p className="rise rise-3 mt-6 text-lg leading-relaxed text-[color:var(--color-navy-700)] max-w-2xl">
                 {SITE.name} connects Seventh-day Adventist business owners, professionals,
-                and entrepreneurs across the Cayman Islands with the community they serve —
+                and entrepreneurs across the Cayman Islands with the people they serve —
                 a trusted directory built around shared faith, integrity, and quality of work.
               </p>
               <div className="rise rise-4 mt-8 flex flex-wrap gap-3">
                 <Link href="/directory" className="btn btn-gold">
-                  Browse the marketplace <ArrowRight size={16} />
+                  Browse the directory <ArrowRight size={16} />
                 </Link>
                 <Link href="/membership/apply" className="btn btn-primary">
                   List your business
@@ -36,7 +36,7 @@ export default function HomePage() {
 
             {/* Decorative hero card */}
             <div className="lg:col-span-5 rise rise-3">
-              <MarketplaceSpotlight />
+              <CommunitySpotlight />
             </div>
           </div>
         </div>
@@ -46,12 +46,12 @@ export default function HomePage() {
       <section className="border-y border-[color:var(--color-navy-100)] bg-[color:var(--color-cream)]/40">
         <div className="mx-auto max-w-6xl px-5 lg:px-8 py-10 grid md:grid-cols-3 gap-6 items-start">
           <div className="md:col-span-1">
-            <p className="section-eyebrow">Why this marketplace</p>
+            <p className="section-eyebrow">Why this community</p>
             <h3 className="mt-2 font-display text-2xl">Faith, integrity, and quality in business.</h3>
           </div>
           <p className="md:col-span-2 text-[color:var(--color-navy-700)] leading-relaxed">
-            We help the community find Adventist-owned businesses they can trust — and we help
-            Adventist owners reach customers who share their values. One marketplace, built around
+            We help the public find Adventist-owned businesses they can trust — and we help
+            Adventist owners reach customers who share their values. One community, built around
             relationships that already exist across the islands.
           </p>
         </div>
@@ -61,8 +61,8 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-5 lg:px-8 py-20">
         <SectionHeader
           eyebrow={`What ${SITE.shortName} offers`}
-          title="Four ways the marketplace serves you"
-          subtitle="Whether you're listing a business or looking for one, the marketplace is built around real, local connections."
+          title="Four ways the community serves you"
+          subtitle="Whether you're listing a business or looking for one, the community is built around real, local connections."
         />
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <Pillar icon={<Store size={20} />} title="Trusted listings">
@@ -104,7 +104,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="mt-4 text-sm text-[color:var(--color-navy-700)] leading-relaxed">
-                Be one of the first Adventist-owned businesses listed in the marketplace.
+                Be one of the first Adventist-owned businesses listed in the community directory.
               </p>
               <Link href="/membership" className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-gold-700)] hover:text-[color:var(--color-gold-600)]">
                 List your business <ArrowRight size={14} />
@@ -146,7 +146,7 @@ function Pillar({ icon, title, children }: { icon: React.ReactNode; title: strin
   );
 }
 
-function MarketplaceSpotlight() {
+function CommunitySpotlight() {
   return (
     <div className="relative card overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[color:var(--color-navy-900)] via-[color:var(--color-navy-800)] to-[color:var(--color-teal-600)]" />
@@ -159,7 +159,7 @@ function MarketplaceSpotlight() {
           {SITE.shortName} · Grand Cayman
         </p>
         <h3 className="mt-3 font-display text-3xl leading-tight">
-          Adventist Business<br />Marketplace
+          Adventist Business<br />Community
         </h3>
         <p className="mt-3 text-sm text-white/85 max-w-xs">
           A trusted directory of Adventist-owned businesses, professionals, and tradespeople

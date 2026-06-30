@@ -21,13 +21,13 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL ?? "http://localhost:3000"),
   title: {
-    default: "Adventist Business Marketplace — Cayman Islands",
-    template: "%s · Adventist Business Marketplace",
+    default: "Adventist Business Community — Cayman Islands",
+    template: "%s · Adventist Business Community",
   },
   description:
     "A trusted directory of Seventh-day Adventist business owners, professionals, and tradespeople across the Cayman Islands. Search, list, and connect.",
   openGraph: {
-    title: "Adventist Business Marketplace",
+    title: "Adventist Business Community",
     description: "Showcase. Connect. Succeed. — Adventist-owned businesses in the Cayman Islands.",
     type: "website",
   },

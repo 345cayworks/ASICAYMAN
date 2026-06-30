@@ -162,7 +162,7 @@ export default async function AdminOverview() {
           Admin console
         </h1>
         <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
-          Snapshot of the Adventist Business Marketplace.
+          Snapshot of the Adventist Business Community.
         </p>
       </header>
 

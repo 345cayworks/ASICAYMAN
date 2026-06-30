@@ -20,8 +20,8 @@ export interface HouseNudge {
 export const HOUSE_NUDGES: Record<HouseVariant, readonly HouseNudge[]> = {
   member: [
     {
-      title: "List your business in the marketplace",
-      body: "Approved listings show up in the public Adventist Business Marketplace — add yours in a few minutes.",
+      title: "List your business in the directory",
+      body: "Approved listings show up in the public Adventist Business Community directory — add yours in a few minutes.",
       cta: "Add your business",
       href: "/dashboard/business",
     },
@@ -32,9 +32,9 @@ export const HOUSE_NUDGES: Record<HouseVariant, readonly HouseNudge[]> = {
       href: "/dashboard/benefits",
     },
     {
-      title: "See your listing in the public marketplace",
-      body: "How members of the community discover your business when they search.",
-      cta: "Open the marketplace",
+      title: "See your listing in the public directory",
+      body: "How members of the public discover your business when they search the community.",
+      cta: "Open the directory",
       href: "/directory",
     },
     {
@@ -46,20 +46,20 @@ export const HOUSE_NUDGES: Record<HouseVariant, readonly HouseNudge[]> = {
   ],
   guest: [
     {
-      title: "Join the Adventist Business Marketplace",
+      title: "Join the Adventist Business Community",
       body: "Join Adventist business owners, professionals, and entrepreneurs across the Cayman Islands.",
       cta: "Apply for membership",
       href: "/membership/apply",
     },
     {
-      title: "Browse the business marketplace",
+      title: "Browse the community directory",
       body: "Discover trusted Adventist-owned businesses, professionals, and services across the Cayman Islands.",
-      cta: "Open marketplace",
+      cta: "Open directory",
       href: "/directory",
     },
     {
-      title: "About the marketplace",
-      body: "How the Adventist Business Marketplace connects business owners and the community they serve.",
+      title: "About the community",
+      body: "How the Adventist Business Community connects business owners and the public they serve.",
       cta: "Learn more",
       href: "/about",
     },

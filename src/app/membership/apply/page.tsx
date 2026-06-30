@@ -23,15 +23,15 @@ export default function MembershipApplyPage() {
       <div className="mt-6 space-y-5 text-sm text-[color:var(--color-navy-700)] leading-relaxed">
         <div>
           <h2 className="font-display text-lg text-[color:var(--color-navy-900)]">
-            About the marketplace
+            About the community
           </h2>
           <p className="mt-2">
-            The Adventist Business Marketplace is an organisation of Seventh-day Adventist Church
+            The Adventist Business Community is an organisation of Seventh-day Adventist Church
             members in the Cayman Islands who work in the private sector in business and
             professional vocations. We recognise that our time, talents, treasures, and body
             temple belong to God, and that our vocations can and should be a form of service.
             Members commit to running their businesses with integrity and to participating in a
-            shared marketplace that the community can trust. Our motto is{" "}
+            shared community the public can trust. Our motto is{" "}
             <em>&ldquo;Sharing Christ in the Marketplace&rdquo;</em>.
           </p>
         </div>
@@ -72,10 +72,10 @@ export default function MembershipApplyPage() {
           <p className="mt-1.5">
             Payment should be made to RBC — <strong>ASI Cayman cheque account
             #06975-1154855</strong>. Receipts should be sent to{" "}
-            <a className="underline" href="mailto:asicayman24@gmail.com">
-              asicayman24@gmail.com
+            <a className="underline" href="mailto:info@345guide.com">
+              info@345guide.com
             </a>{" "}
-            or WhatsApp to <strong>345 324 0458</strong>. You can submit your application now
+            or WhatsApp to <strong>345 324 9000</strong>. You can submit your application now
             and send the receipt after payment.
           </p>
         </div>

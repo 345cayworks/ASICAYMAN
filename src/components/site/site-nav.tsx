@@ -28,8 +28,8 @@ export function SiteNav() {
           <Logo />
           <span className="font-display text-lg tracking-tight text-[color:var(--color-navy-900)] leading-tight">
             <span className="hidden sm:inline">Adventist Business </span>
-            <span className="sm:hidden">ABM </span>
-            <span className="text-[color:var(--color-gold-600)]">Marketplace</span>
+            <span className="sm:hidden">ABC </span>
+            <span className="text-[color:var(--color-gold-600)]">Community</span>
           </span>
         </Link>
 

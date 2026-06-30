@@ -24,7 +24,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <DashLogo />
             <span className="font-display text-base tracking-tight leading-tight">
               Adventist Business{" "}
-              <span className="text-[color:var(--color-gold-600)]">Marketplace</span>
+              <span className="text-[color:var(--color-gold-600)]">Community</span>
             </span>
           </Link>
 

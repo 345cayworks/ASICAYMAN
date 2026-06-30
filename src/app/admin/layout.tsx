@@ -33,7 +33,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </svg>
             <span className="font-display text-base tracking-tight text-white leading-tight">
               Adventist Business{" "}
-              <span className="text-[color:var(--color-gold-400)]">Marketplace</span>
+              <span className="text-[color:var(--color-gold-400)]">Community</span>
             </span>
           </div>
           <p className="pl-12 -mt-0.5 text-xs uppercase tracking-[0.18em] text-[color:var(--color-gold-400)]">Admin</p>

@@ -6,12 +6,12 @@ import { SITE } from "@/lib/utils";
 export const metadata = { title: "Membership" };
 
 const benefits = [
-  { title: "Public listing", body: "Your business in the Adventist Business Marketplace directory, searchable by category and offer." },
+  { title: "Public listing", body: "Your business in the Adventist Business Community directory, searchable by category and offer." },
   { title: "Trusted network", body: "Connect with fellow Adventist business owners and professionals across the Cayman Islands." },
   { title: "Featured placement", body: "Eligibility for featured listings, special-offer highlights, and seasonal spotlights." },
   { title: "Member resources", body: "Access to member-only announcements, training, and platform updates." },
-  { title: "Community referrals", body: "Members regularly send work to one another and to vetted partners on the marketplace." },
-  { title: "Purpose-built", body: "A marketplace shaped around shared faith, integrity, and quality of work." },
+  { title: "Community referrals", body: "Members regularly send work to one another and to vetted partners in the community." },
+  { title: "Purpose-built", body: "A community shaped around shared faith, integrity, and quality of work." },
 ];
 
 export default function MembershipPage() {
@@ -20,7 +20,7 @@ export default function MembershipPage() {
       <section className="mx-auto max-w-6xl px-5 lg:px-8 pt-16 md:pt-24 pb-12">
         <p className="section-eyebrow">Membership</p>
         <h1 className="mt-4 text-4xl md:text-5xl font-display tracking-tight max-w-3xl leading-tight">
-          List your business in a marketplace the community trusts.
+          List your business in a community the public trusts.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[color:var(--color-navy-700)] leading-relaxed">
           The {SITE.name} is open to Seventh-day Adventist business owners, professionals,
@@ -69,7 +69,7 @@ export default function MembershipPage() {
           </div>
           <div className="lg:col-span-2 flex flex-col gap-3">
             <Link href="/membership/apply" className="btn btn-primary">Apply for membership</Link>
-            <Link href="/directory" className="btn btn-outline">Browse the marketplace</Link>
+            <Link href="/directory" className="btn btn-outline">Browse the directory</Link>
             <p className="text-xs text-[color:var(--color-navy-600)] text-center">
               Already a member? <Link href="/auth/signin" className="underline underline-offset-4">Sign in</Link>
             </p>

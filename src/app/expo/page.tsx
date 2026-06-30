@@ -6,9 +6,9 @@ import { SITE } from "@/lib/utils";
 import { AdBanner } from "@/components/ads/variants";
 import { AD_PLACEMENTS } from "@/components/ads/placements";
 
-// Hidden — public expo entry point disabled while the marketplace is the
-// site's primary surface. Page code is retained so it can be unhidden by
-// removing the `notFound()` call below.
+// Hidden — public expo entry point disabled while the community directory
+// is the site's primary surface. Page code is retained so it can be
+// unhidden by removing the `notFound()` call below.
 export const metadata = { title: "Business & Career Expo 2026" };
 
 const attractions = [

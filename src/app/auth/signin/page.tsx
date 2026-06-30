@@ -14,7 +14,7 @@ export default async function SignInPage({
     <section className="mx-auto max-w-md px-5 pt-24 pb-24">
       <h1 className="font-display text-3xl tracking-tight">Welcome back</h1>
       <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
-        Sign in to your marketplace account.
+        Sign in to your community account.
       </p>
 
       <div className="mt-8 card p-7">

@@ -8,7 +8,7 @@ export default function SignUpPage() {
     <section className="mx-auto max-w-md px-5 pt-20 pb-24">
       <h1 className="font-display text-3xl tracking-tight">Become a member</h1>
       <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
-        Create a marketplace account. We&apos;ll review your application and activate access.
+        Create a community account. We&apos;ll review your application and activate access.
       </p>
 
       <div className="mt-8 card p-7">
