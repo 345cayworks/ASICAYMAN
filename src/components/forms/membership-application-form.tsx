@@ -121,9 +121,6 @@ export function MembershipApplicationForm() {
                 className="accent-[color:var(--color-navy-900)]"
               />
               <span className="text-sm flex-1">{c.label}</span>
-              <span className="text-sm font-medium text-[color:var(--color-gold-700)]">
-                CI${c.feeKyd}
-              </span>
             </label>
           ))}
         </div>

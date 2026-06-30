@@ -75,7 +75,7 @@ export default async function AdminMembersPage({ searchParams }: Props) {
                     <p className="mt-1 text-xs">
                       {(() => {
                         const c = getMembershipCategory(m.memberProfile.membershipCategory);
-                        return c ? `${c.label} · CI$${c.feeKyd}` : m.memberProfile.membershipCategory;
+                        return c ? c.label : m.memberProfile.membershipCategory;
                       })()}
                     </p>
                   )}

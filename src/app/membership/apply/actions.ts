@@ -61,7 +61,7 @@ export async function applyForMembership(
           membershipCategory: category.value,
           businessOrProfession,
           churchAffiliation,
-          bio: `Applied as: ${category.label} (annual fee CI$${category.feeKyd}). Commitment accepted.`,
+          bio: `Applied as: ${category.label}. Commitment accepted.`,
         },
       },
     },
