@@ -19,7 +19,7 @@ export const signInSchema = z.object({
   password: z.string().min(1),
 });
 
-// ----- Membership application (official ASI Cayman form) -----
+// ----- Membership application (Adventist Business Community form) -----
 export const membershipApplicationSchema = z
   .object({
     name: z.string().trim().min(2, "Please enter your name").max(120),
@@ -43,7 +43,7 @@ export const membershipApplicationSchema = z
     ]),
     commitment: z.literal("YES", {
       errorMap: () => ({
-        message: "You must agree to the ASI commitment to apply",
+        message: "You must agree to the ABC commitment to apply",
       }),
     }),
     password: z.string().min(8, "Use at least 8 characters").max(120),

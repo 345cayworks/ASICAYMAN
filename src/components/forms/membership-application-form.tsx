@@ -15,10 +15,11 @@ import type { z } from "zod";
 type FormValues = z.infer<typeof membershipApplicationSchema>;
 
 const COMMITMENT_TEXT =
-  "Having read the purpose, objectives, and membership requirements of ASI " +
-  "and recognizing that my/our business or profession is a ministry, I/we " +
-  "desire and pledge to uphold the standards and goals of ASI. In witness " +
-  "thereto, I/we am/are committed to ASI.";
+  "Having read the purpose, objectives, and membership requirements of the " +
+  "Adventist Business Community (ABC) and recognizing that my/our business " +
+  "or profession is a ministry, I/we desire and pledge to uphold the " +
+  "standards and goals of the Adventist Business Community. In witness " +
+  "thereto, I/we am/are committed to the Adventist Business Community (ABC).";
 
 export function MembershipApplicationForm() {
   const [pending, startTransition] = useTransition();
@@ -145,7 +146,7 @@ export function MembershipApplicationForm() {
               {...form.register("commitment")}
               className="accent-[color:var(--color-navy-900)]"
             />
-            Yes, I/we am/are committed to ASI
+            Yes, I/we am/are committed to the Adventist Business Community (ABC)
           </label>
           <label className="flex items-center gap-2 text-sm cursor-pointer text-[color:var(--color-navy-600)]">
             <input
