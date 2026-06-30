@@ -2,7 +2,9 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { approveMember, rejectMember, changeRole } from "@/app/admin/actions";
 import { getMembershipCategory } from "@/lib/membership";
+import { requireUser } from "@/lib/rbac";
 import { CheckCircle2, X } from "lucide-react";
+import { ResetPasswordButton } from "./reset-password-button";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Members" };
@@ -11,6 +13,8 @@ interface Props { searchParams: Promise<{ status?: string; role?: string }> }
 
 export default async function AdminMembersPage({ searchParams }: Props) {
   const params = await searchParams;
+  const viewer = await requireUser();
+  const isSuperadmin = viewer.role === "SUPERADMIN";
   const members = await prisma.user.findMany({
     where: {
       ...(params.status ? { status: params.status as "PENDING" | "ACTIVE" | "SUSPENDED" | "ARCHIVED" } : {}),
@@ -114,6 +118,9 @@ export default async function AdminMembersPage({ searchParams }: Props) {
                         <input type="hidden" name="userId" value={m.id} />
                         <button className="btn btn-outline text-xs py-1.5 px-3 w-full"><X size={12} /> Suspend</button>
                       </form>
+                    )}
+                    {isSuperadmin && (
+                      <ResetPasswordButton userId={m.id} email={m.email} />
                     )}
                   </div>
                 </td>
