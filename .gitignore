@@ -13,3 +13,4 @@ coverage
 prisma/migrations/dev.db*
 next-env.d.ts
 tsconfig.tsbuildinfo
+.env.cf
