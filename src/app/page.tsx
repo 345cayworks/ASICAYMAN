@@ -120,7 +120,7 @@ export default function HomePage() {
           <div className="md:col-span-2">
             <h3 className="font-display text-2xl">Have a question or want to partner with us?</h3>
             <p className="mt-2 text-[color:var(--color-navy-700)]">
-              Reach us at <a href={`mailto:${SITE.email}`} className="underline underline-offset-4">{SITE.email}</a> or WhatsApp <a href={SITE.whatsappLink} className="underline underline-offset-4">{SITE.whatsapp}</a>.
+              Reach us at <a href={`mailto:${SITE.email}`} className="underline underline-offset-4">{SITE.email}</a>.
             </p>
           </div>
           <div className="md:text-right">

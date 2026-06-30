@@ -11,8 +11,6 @@ export const SITE = {
   longName: "Adventist Business Community — Cayman Islands",
   tagline: "Showcase. Connect. Succeed.",
   email: "info@345guide.com",
-  whatsapp: "345-324-9000",
-  whatsappLink: "https://wa.me/13453249000",
   rbcAccount: {
     name: "ASI Cayman Cheque Account",
     number: "06975-1154855",

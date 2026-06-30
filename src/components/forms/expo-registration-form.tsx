@@ -142,8 +142,7 @@ export function ExpoRegistrationForm({ defaultEmail }: { defaultEmail?: string }
           <p className="font-medium text-[color:var(--color-navy-900)]">How to pay</p>
           <p>Pay at RBC to <strong>{SITE.rbcAccount.name}</strong>, account <strong>#{SITE.rbcAccount.number}</strong>.</p>
           <p>Upload your receipt below, or send it to{" "}
-            <a href={`mailto:${SITE.email}`} className="underline">{SITE.email}</a> /
-            WhatsApp <a href={SITE.whatsappLink} className="underline">{SITE.whatsapp}</a>.
+            <a href={`mailto:${SITE.email}`} className="underline">{SITE.email}</a>.
           </p>
         </div>
 
@@ -257,7 +256,7 @@ function SuccessConfirmation({
         <h3 className="font-display text-lg">Next steps</h3>
         <ol className="mt-3 space-y-2 text-sm text-[color:var(--color-navy-800)] list-decimal pl-4">
           <li>Pay at RBC to <strong>{SITE.rbcAccount.name}</strong>, account <strong>#{SITE.rbcAccount.number}</strong>.</li>
-          <li>{receiptUploaded ? "Your receipt is uploaded — admin will verify shortly." : <>Upload your receipt or send it to <a className="underline" href={`mailto:${SITE.email}`}>{SITE.email}</a> / WhatsApp {SITE.whatsapp}.</>}</li>
+          <li>{receiptUploaded ? "Your receipt is uploaded — admin will verify shortly." : <>Upload your receipt or send it to <a className="underline" href={`mailto:${SITE.email}`}>{SITE.email}</a>.</>}</li>
           <li>You'll receive booth details and exhibitor instructions by email closer to the event.</li>
         </ol>
       </div>

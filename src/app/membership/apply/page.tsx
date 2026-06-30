@@ -74,9 +74,9 @@ export default function MembershipApplyPage() {
             #06975-1154855</strong>. Receipts should be sent to{" "}
             <a className="underline" href="mailto:info@345guide.com">
               info@345guide.com
-            </a>{" "}
-            or WhatsApp to <strong>345 324 9000</strong>. You can submit your application now
-            and send the receipt after payment.
+            </a>
+            . You can submit your application now and send the receipt after
+            payment.
           </p>
         </div>
       </div>

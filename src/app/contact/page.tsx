@@ -1,4 +1,4 @@
-import { Mail, MessageCircle, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { ContactForm } from "@/components/forms/contact-form";
 import { SITE } from "@/lib/utils";
 
@@ -32,13 +32,6 @@ export default function ContactPage() {
                 <div>
                   <p className="text-[color:var(--color-navy-700)]">Email</p>
                   <a href={`mailto:${SITE.email}`} className="text-[color:var(--color-navy-900)] hover:underline">{SITE.email}</a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <MessageCircle size={16} className="mt-0.5 text-[color:var(--color-gold-600)]" />
-                <div>
-                  <p className="text-[color:var(--color-navy-700)]">WhatsApp</p>
-                  <a href={SITE.whatsappLink} className="text-[color:var(--color-navy-900)] hover:underline">{SITE.whatsapp}</a>
                 </div>
               </li>
               <li className="flex items-start gap-3">

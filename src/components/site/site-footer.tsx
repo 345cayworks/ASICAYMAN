@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
 import { SITE } from "@/lib/utils";
 
 export function SiteFooter() {
@@ -39,11 +39,6 @@ export function SiteFooter() {
               <li>
                 <a href={`mailto:${SITE.email}`} className="inline-flex items-center gap-2 hover:text-white">
                   <Mail size={14} /> {SITE.email}
-                </a>
-              </li>
-              <li>
-                <a href={SITE.whatsappLink} className="inline-flex items-center gap-2 hover:text-white">
-                  <MessageCircle size={14} /> WhatsApp {SITE.whatsapp}
                 </a>
               </li>
             </ul>

@@ -159,8 +159,7 @@ export default function ExpoPage() {
                 Pay at RBC to the <strong>{SITE.rbcAccount.name}</strong>,
                 account <strong>#{SITE.rbcAccount.number}</strong>. Upload your receipt through the
                 portal after registration, or send it to{" "}
-                <a href={`mailto:${SITE.email}`} className="underline underline-offset-4">{SITE.email}</a> /
-                WhatsApp <a href={SITE.whatsappLink} className="underline underline-offset-4">{SITE.whatsapp}</a>.
+                <a href={`mailto:${SITE.email}`} className="underline underline-offset-4">{SITE.email}</a>.
               </p>
             </div>
 
