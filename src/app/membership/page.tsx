@@ -28,7 +28,12 @@ export default function MembershipPage() {
           in front of customers who share their values.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <p className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-[color:var(--color-gold-700)] font-semibold">
+          <span className="size-1.5 rounded-full bg-[color:var(--color-gold-500)]" aria-hidden />
+          Free to join · open application
+        </p>
+
+        <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/membership/apply" className="btn btn-gold">
             Become a member <ArrowRight size={16} />
           </Link>

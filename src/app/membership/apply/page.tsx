@@ -50,16 +50,12 @@ export default function MembershipApplyPage() {
           <p className="mt-2">
             Membership is available to any Seventh-day Adventist Church member in good standing
             who operates a business, provides a professional service, or operates a supporting
-            ministry, and whose business has been in operation for at least six months. Annual
-            membership fees by category:
+            ministry. Membership is free — pick the category that fits best:
           </p>
           <ul className="mt-3 rounded-lg border border-[color:var(--color-navy-100)] divide-y divide-[color:var(--color-navy-100)]">
             {MEMBERSHIP_CATEGORIES.map((c) => (
-              <li key={c.value} className="flex justify-between px-4 py-2.5">
-                <span>{c.label}</span>
-                <span className="font-medium text-[color:var(--color-gold-700)]">
-                  CI${c.feeKyd}
-                </span>
+              <li key={c.value} className="px-4 py-2.5">
+                {c.label}
               </li>
             ))}
           </ul>
@@ -67,16 +63,15 @@ export default function MembershipApplyPage() {
 
         <div className="rounded-lg bg-[color:var(--color-cream)] p-4">
           <h2 className="font-display text-base text-[color:var(--color-navy-900)]">
-            Payment instructions
+            Free to join
           </h2>
           <p className="mt-1.5">
-            Payment should be made to RBC — <strong>ASI Cayman cheque account
-            #06975-1154855</strong>. Receipts should be sent to{" "}
+            There&apos;s no membership fee. Submit your application and a member
+            of the team will review it. Questions go to{" "}
             <a className="underline" href="mailto:info@345guide.com">
               info@345guide.com
             </a>
-            . You can submit your application now and send the receipt after
-            payment.
+            .
           </p>
         </div>
       </div>
