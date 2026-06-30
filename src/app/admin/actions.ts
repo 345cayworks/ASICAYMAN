@@ -1,5 +1,7 @@
 "use server";
 
+import { randomBytes } from "node:crypto";
+import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireAdmin, requireSuperadmin } from "@/lib/rbac";
@@ -32,6 +34,47 @@ export async function changeRole(formData: FormData) {
   const role = String(formData.get("role") ?? "MEMBER") as "MEMBER" | "EXHIBITOR" | "ADMIN" | "SUPERADMIN";
   await prisma.user.update({ where: { id: userId }, data: { role } });
   revalidatePath("/admin/members");
+}
+
+// ----- Password reset (admin-driven) -----
+//
+// SUPERADMIN-only. Generates a fresh random temp password, bcrypts it onto
+// the user, and returns the plaintext to the calling client so the admin can
+// hand it to the user via a secure side-channel (then have them change it on
+// first sign-in). The plaintext is NEVER persisted; the AuditLog row carries
+// the actor + target email only.
+export async function resetMemberPassword(
+  userId: string,
+): Promise<{ ok: true; email: string; tempPassword: string } | { ok: false; error: string }> {
+  const actor = await requireSuperadmin();
+  if (!userId) return { ok: false, error: "Missing user id." };
+
+  const target = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, email: true },
+  });
+  if (!target) return { ok: false, error: "User not found." };
+
+  // 9 bytes → exactly 12 base64-url chars (~72 bits entropy). Short enough to
+  // dictate over the phone, long enough to resist guessing.
+  const tempPassword = randomBytes(9).toString("base64url");
+  const passwordHash = await bcrypt.hash(tempPassword, 10);
+
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: userId }, data: { passwordHash } }),
+    prisma.auditLog.create({
+      data: {
+        actorUserId: actor.id,
+        actorEmail: actor.email ?? null,
+        action: "PASSWORD_RESET",
+        entity: "User",
+        details: { targetUserId: userId, targetEmail: target.email },
+      },
+    }),
+  ]);
+
+  revalidatePath("/admin/members");
+  return { ok: true, email: target.email, tempPassword };
 }
 
 // ----- Listing moderation -----
