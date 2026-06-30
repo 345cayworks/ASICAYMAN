@@ -1,0 +1,21 @@
+// Cloudflare Workers config for the Adventist Business Community app.
+// Built via `npm run cf:build` (runs OpenNext) and deployed via `npm run cf:deploy`.
+//
+// Bindings (R2, Hyperdrive) are added in follow-up PRs as the migration lands.
+// Secrets are NOT set here — use `wrangler secret put NAME` per environment.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "abc-cayman",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Non-secret env vars. Real secrets (AUTH_SECRET, AD_ENGINE_KEY,
+  // DATABASE_URL, etc.) get pushed via `wrangler secret put`.
+  "vars": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  }
+}
