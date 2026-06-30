@@ -3,13 +3,12 @@ import { requireUser } from "@/lib/rbac";
 import { SignOutButton } from "@/components/site/sign-out-button";
 import { SponsoredCard } from "@/components/ads/variants";
 import { AD_PLACEMENTS } from "@/components/ads/placements";
-import { Home, User, Briefcase, Ticket, Gift, ShieldCheck } from "lucide-react";
+import { Home, User, Briefcase, Gift, ShieldCheck } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Overview", icon: Home },
   { href: "/dashboard/profile", label: "Profile", icon: User },
   { href: "/dashboard/business", label: "My business", icon: Briefcase },
-  { href: "/dashboard/registration", label: "Expo registration", icon: Ticket },
   { href: "/dashboard/benefits", label: "Member benefits", icon: Gift },
 ];
 
@@ -23,8 +22,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <aside className="lg:sticky lg:top-8 lg:self-start">
           <Link href="/" className="flex items-center gap-2.5 mb-8 pl-2">
             <DashLogo />
-            <span className="font-display text-lg tracking-tight">
-              ASI <span className="text-[color:var(--color-gold-600)]">Cayman</span>
+            <span className="font-display text-base tracking-tight leading-tight">
+              Adventist Business{" "}
+              <span className="text-[color:var(--color-gold-600)]">Marketplace</span>
             </span>
           </Link>
 

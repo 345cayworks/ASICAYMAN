@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, Briefcase, Ticket, Gift, CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import { ArrowRight, Briefcase, Compass, Gift, CheckCircle2 } from "lucide-react";
 import { requireUser } from "@/lib/rbac";
 import { prisma } from "@/lib/db";
-import { formatDollars } from "@/lib/pricing";
 import { AdBanner } from "@/components/ads/variants";
 import { AD_PLACEMENTS } from "@/components/ads/placements";
 import { PageWithRightColumn } from "@/components/ads/page-with-right-column";
+import { SITE } from "@/lib/utils";
 
 interface Props {
   searchParams: Promise<{ welcome?: string }>;
@@ -16,17 +16,10 @@ export default async function DashboardHome({ searchParams }: Props) {
   const params = await searchParams;
   const welcome = params.welcome === "1";
 
-  const [user, expoRegistration] = await Promise.all([
-    prisma.user.findUnique({
-      where: { id: sessionUser.id },
-      include: { memberProfile: true, businessListings: true },
-    }),
-    prisma.expoRegistration.findFirst({
-      where: { email: sessionUser.email ?? "" },
-      orderBy: { createdAt: "desc" },
-      include: { event: true },
-    }),
-  ]);
+  const user = await prisma.user.findUnique({
+    where: { id: sessionUser.id },
+    include: { memberProfile: true, businessListings: true },
+  });
 
   if (!user) return null;
 
@@ -44,7 +37,7 @@ export default async function DashboardHome({ searchParams }: Props) {
         <div className="card p-5 bg-[color:var(--color-gold-50)] border-[color:var(--color-gold-200)] flex gap-3 items-start">
           <CheckCircle2 size={20} className="text-[color:var(--color-gold-700)] mt-0.5" />
           <div>
-            <h3 className="font-display text-lg">Welcome to ASI Cayman.</h3>
+            <h3 className="font-display text-lg">Welcome to the {SITE.name}.</h3>
             <p className="mt-1 text-sm text-[color:var(--color-navy-800)]">
               Your application is in review. Complete your profile and business listing to help speed things up.
             </p>
@@ -57,12 +50,14 @@ export default async function DashboardHome({ searchParams }: Props) {
         <h1 className="mt-2 font-display text-3xl md:text-4xl tracking-tight">
           Hi, {user.name?.split(" ")[0] ?? "there"}.
         </h1>
-        <p className="mt-2 text-[color:var(--color-navy-700)]">Here's an overview of your ASI Cayman account.</p>
+        <p className="mt-2 text-[color:var(--color-navy-700)]">
+          Here&apos;s an overview of your {SITE.name} account.
+        </p>
       </header>
 
       <AdBanner placement={AD_PLACEMENTS.dashboardTop} userRole={sessionUser.role} />
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatusCard
           icon={<CheckCircle2 size={16} />}
           label="Membership"
@@ -76,12 +71,6 @@ export default async function DashboardHome({ searchParams }: Props) {
           tone={business ? statusTone(business.status) : "neutral"}
         />
         <StatusCard
-          icon={<Ticket size={16} />}
-          label="Expo 2026"
-          value={expoRegistration ? expoRegistration.paymentStatus.replace(/_/g, " ") : "Not registered"}
-          tone={expoRegistration ? "active" : "neutral"}
-        />
-        <StatusCard
           icon={<Gift size={16} />}
           label="Profile complete"
           value={`${profileCompleteness}%`}
@@ -91,48 +80,37 @@ export default async function DashboardHome({ searchParams }: Props) {
 
       <section className="grid lg:grid-cols-2 gap-5">
         <div className="card p-6">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="section-eyebrow">Next step</p>
-              <h3 className="mt-2 font-display text-xl">Expo 2026</h3>
-            </div>
-            {expoRegistration && <ExpoStatusBadge status={expoRegistration.paymentStatus} />}
-          </div>
-
-          {expoRegistration ? (
-            <>
-              <p className="mt-3 text-sm text-[color:var(--color-navy-700)]">
-                Booth registered for <strong>{expoRegistration.businessName}</strong>.
-                Amount: <strong>{formatDollars(expoRegistration.paymentAmount)}</strong>.
-              </p>
-              <Link href="/dashboard/registration" className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-navy-900)] hover:text-[color:var(--color-gold-600)]">
-                Manage registration <ArrowRight size={14} />
-              </Link>
-            </>
-          ) : (
-            <>
-              <p className="mt-3 text-sm text-[color:var(--color-navy-700)]">
-                Register a booth at the Business & Career Expo on June 28, 2026.
-              </p>
-              <Link href="/expo/register" className="mt-5 btn btn-gold text-sm">
-                Register a booth <ArrowRight size={14} />
-              </Link>
-            </>
-          )}
-        </div>
-
-        <div className="card p-6">
-          <p className="section-eyebrow">Business directory</p>
+          <p className="section-eyebrow">Your listing</p>
           <h3 className="mt-2 font-display text-xl">
             {business ? business.businessName : "List your business"}
           </h3>
           <p className="mt-3 text-sm text-[color:var(--color-navy-700)]">
             {business
-              ? `Status: ${business.status.toLowerCase()}. Approved listings appear in the public directory.`
-              : "Add your business to the public ASI Cayman directory so the church and community can find you."}
+              ? `Status: ${business.status.toLowerCase()}. Approved listings appear in the public marketplace.`
+              : "Add your business to the marketplace so the community can find you."}
           </p>
-          <Link href="/dashboard/business" className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-navy-900)] hover:text-[color:var(--color-gold-600)]">
+          <Link
+            href="/dashboard/business"
+            className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-navy-900)] hover:text-[color:var(--color-gold-600)]"
+          >
             {business ? "Edit listing" : "Add your business"} <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        <div className="card p-6">
+          <p className="section-eyebrow">Public marketplace</p>
+          <h3 className="mt-2 font-display text-xl flex items-center gap-2">
+            <Compass size={18} className="text-[color:var(--color-gold-600)]" />
+            Browse the marketplace
+          </h3>
+          <p className="mt-3 text-sm text-[color:var(--color-navy-700)]">
+            See how your listing appears alongside other Adventist-owned businesses across the Cayman Islands.
+          </p>
+          <Link
+            href="/directory"
+            className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-navy-900)] hover:text-[color:var(--color-gold-600)]"
+          >
+            Open the marketplace <ArrowRight size={14} />
           </Link>
         </div>
       </section>
@@ -149,7 +127,7 @@ export default async function DashboardHome({ searchParams }: Props) {
             <p className="mt-1 text-xs text-[color:var(--color-navy-600)]">What your membership unlocks</p>
           </Link>
           <Link href="/directory" className="p-4 rounded-lg border border-[color:var(--color-navy-100)] hover:border-[color:var(--color-navy-800)] transition-colors">
-            <p className="font-medium text-[color:var(--color-navy-900)]">Public directory</p>
+            <p className="font-medium text-[color:var(--color-navy-900)]">Public marketplace</p>
             <p className="mt-1 text-xs text-[color:var(--color-navy-600)]">See how your listing appears</p>
           </Link>
         </div>
@@ -172,19 +150,6 @@ function StatusCard({ icon, label, value, tone }: { icon: React.ReactNode; label
       <p className="mt-1 font-display text-lg leading-tight capitalize">{value.toLowerCase()}</p>
     </div>
   );
-}
-
-function ExpoStatusBadge({ status }: { status: string }) {
-  const map: Record<string, { className: string; icon: React.ReactNode; label: string }> = {
-    PENDING: { className: "badge-pending", icon: <Clock size={12} />, label: "Awaiting payment" },
-    RECEIPT_UPLOADED: { className: "badge-pending", icon: <Clock size={12} />, label: "Receipt in review" },
-    VERIFIED: { className: "badge-paid", icon: <CheckCircle2 size={12} />, label: "Verified" },
-    PAID: { className: "badge-approved", icon: <CheckCircle2 size={12} />, label: "Paid" },
-    REJECTED: { className: "badge-rejected", icon: <AlertCircle size={12} />, label: "Rejected" },
-    REFUNDED: { className: "badge-paid", icon: <CheckCircle2 size={12} />, label: "Refunded" },
-  };
-  const m = map[status] ?? map.PENDING;
-  return <span className={`badge ${m.className}`}>{m.icon} {m.label}</span>;
 }
 
 function statusTone(status?: string | null): "active" | "warn" | "pending" | "neutral" {

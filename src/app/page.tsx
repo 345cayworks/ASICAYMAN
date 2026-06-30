@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Calendar, MapPin, Sparkles, Heart, Briefcase, GraduationCap, Users, Mail } from "lucide-react";
+import { ArrowRight, Briefcase, Users, Mail, Store, Compass, CheckCircle2 } from "lucide-react";
 import { SectionHeader } from "@/components/site/section-header";
 import { SITE } from "@/lib/utils";
 
@@ -11,32 +11,32 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 lg:px-8 pt-16 md:pt-24 pb-20">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7">
-              <p className="section-eyebrow rise rise-1">Adventist-Laymen's Services & Industries · Cayman Islands</p>
+              <p className="section-eyebrow rise rise-1">Adventist Business Marketplace · Cayman Islands</p>
               <h1 className="rise rise-2 mt-4 text-4xl md:text-5xl lg:text-6xl font-display leading-[1.05] tracking-tight">
-                Connecting Adventist <span className="italic text-[color:var(--color-gold-600)]">Business</span>,
-                <br className="hidden md:block" /> Ministry & Community Impact
+                A marketplace of <span className="italic text-[color:var(--color-gold-600)]">Adventist</span>
+                <br className="hidden md:block" /> businesses & professionals
               </h1>
               <p className="rise rise-3 mt-6 text-lg leading-relaxed text-[color:var(--color-navy-700)] max-w-2xl">
-                ASI Cayman brings together Seventh-day Adventist business owners, professionals,
-                entrepreneurs, and service-minded individuals to support Christ-centered outreach,
-                economic empowerment, and community development across the Cayman Islands.
+                {SITE.name} connects Seventh-day Adventist business owners, professionals,
+                and entrepreneurs across the Cayman Islands with the community they serve —
+                a trusted directory built around shared faith, integrity, and quality of work.
               </p>
               <div className="rise rise-4 mt-8 flex flex-wrap gap-3">
-                <Link href="/expo/register" className="btn btn-gold">
-                  Register for the Expo <ArrowRight size={16} />
+                <Link href="/directory" className="btn btn-gold">
+                  Browse the marketplace <ArrowRight size={16} />
                 </Link>
-                <Link href="/membership" className="btn btn-primary">
-                  Become a member
+                <Link href="/membership/apply" className="btn btn-primary">
+                  List your business
                 </Link>
-                <Link href="/directory" className="btn btn-outline">
-                  Explore businesses
+                <Link href="/about" className="btn btn-outline">
+                  How it works
                 </Link>
               </div>
             </div>
 
             {/* Decorative hero card */}
             <div className="lg:col-span-5 rise rise-3">
-              <ExpoSpotlight />
+              <MarketplaceSpotlight />
             </div>
           </div>
         </div>
@@ -46,13 +46,13 @@ export default function HomePage() {
       <section className="border-y border-[color:var(--color-navy-100)] bg-[color:var(--color-cream)]/40">
         <div className="mx-auto max-w-6xl px-5 lg:px-8 py-10 grid md:grid-cols-3 gap-6 items-start">
           <div className="md:col-span-1">
-            <p className="section-eyebrow">Our mission</p>
-            <h3 className="mt-2 font-display text-2xl">Sharing Christ in the marketplace.</h3>
+            <p className="section-eyebrow">Why this marketplace</p>
+            <h3 className="mt-2 font-display text-2xl">Faith, integrity, and quality in business.</h3>
           </div>
           <p className="md:col-span-2 text-[color:var(--color-navy-700)] leading-relaxed">
-            We support Christ-centered outreach through business, health, education, evangelism,
-            community service, family concerns, and special projects — a partnership of laypeople
-            and ministry serving the Cayman Islands since 2001.
+            We help the community find Adventist-owned businesses they can trust — and we help
+            Adventist owners reach customers who share their values. One marketplace, built around
+            relationships that already exist across the islands.
           </p>
         </div>
       </section>
@@ -60,77 +60,23 @@ export default function HomePage() {
       {/* ============================ FOUR PILLARS ============================ */}
       <section className="mx-auto max-w-6xl px-5 lg:px-8 py-20">
         <SectionHeader
-          eyebrow="What ASI Cayman does"
-          title="Four ways we serve the islands"
-          subtitle="Membership in ASI Cayman is about more than networking — it's a partnership for ministry, mentorship, and meaningful community impact."
+          eyebrow={`What ${SITE.shortName} offers`}
+          title="Four ways the marketplace serves you"
+          subtitle="Whether you're listing a business or looking for one, the marketplace is built around real, local connections."
         />
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <Pillar icon={<Briefcase size={20} />} title="Business & enterprise">
-            Visibility, mentorship, and partnership opportunities for Adventist-owned businesses.
+          <Pillar icon={<Store size={20} />} title="Trusted listings">
+            Vetted profiles for Adventist-owned businesses, professionals, and tradespeople across the Cayman Islands.
           </Pillar>
-          <Pillar icon={<Heart size={20} />} title="Health & wellness">
-            Free community screenings, lifestyle education, and health ministry partnerships.
+          <Pillar icon={<Compass size={20} />} title="Easy discovery">
+            Search by category, special offers, and location — find the right business in minutes.
           </Pillar>
-          <Pillar icon={<GraduationCap size={20} />} title="Career & education">
-            Career guidance for youth, students, and job seekers; scholarship support.
+          <Pillar icon={<Briefcase size={20} />} title="Business visibility">
+            A clean public profile, member benefits, and a steady channel of customers who share your values.
           </Pillar>
-          <Pillar icon={<Users size={20} />} title="Community & family">
-            Outreach, family concerns, and special projects with churches across Cayman.
+          <Pillar icon={<Users size={20} />} title="Community">
+            A network of owners and professionals who back each other through referrals and shared work.
           </Pillar>
-        </div>
-      </section>
-
-      {/* ============================ EXPO FEATURE ============================ */}
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-5 lg:px-8 py-20">
-          <div className="card overflow-hidden">
-            <div className="grid lg:grid-cols-5">
-              <div className="lg:col-span-3 p-8 md:p-12">
-                <p className="section-eyebrow">Featured event</p>
-                <h2 className="mt-3 font-display text-3xl md:text-4xl tracking-tight">
-                  Business & Career Expo <span className="italic text-[color:var(--color-gold-600)]">2026</span>
-                </h2>
-                <p className="mt-5 text-[color:var(--color-navy-700)] leading-relaxed max-w-xl">
-                  A free, family-friendly afternoon celebrating Adventist-owned businesses in the
-                  Cayman Islands. Discover local services, sample products, win prizes, and explore
-                  career paths in business, healthcare, trades, and tech.
-                </p>
-                <dl className="mt-7 grid sm:grid-cols-2 gap-y-3 gap-x-6 text-sm">
-                  <div className="flex items-center gap-2.5 text-[color:var(--color-navy-800)]">
-                    <Calendar size={16} className="text-[color:var(--color-gold-600)]" />
-                    <dt className="sr-only">Date</dt><dd>{SITE.expo.date}</dd>
-                  </div>
-                  <div className="flex items-center gap-2.5 text-[color:var(--color-navy-800)]">
-                    <Sparkles size={16} className="text-[color:var(--color-gold-600)]" />
-                    <dt className="sr-only">Time</dt><dd>{SITE.expo.time} · Free admission</dd>
-                  </div>
-                  <div className="flex items-center gap-2.5 text-[color:var(--color-navy-800)] sm:col-span-2">
-                    <MapPin size={16} className="text-[color:var(--color-gold-600)]" />
-                    <dt className="sr-only">Location</dt><dd>{SITE.expo.location}</dd>
-                  </div>
-                </dl>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href="/expo" className="btn btn-primary">Learn more</Link>
-                  <Link href="/expo/register" className="btn btn-gold">Register a booth <ArrowRight size={16} /></Link>
-                </div>
-              </div>
-              <div className="lg:col-span-2 relative bg-gradient-to-br from-[color:var(--color-navy-900)] to-[color:var(--color-navy-700)] p-10 text-white flex flex-col justify-between min-h-[280px]">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-gold-400)]">Public attractions</p>
-                  <ul className="mt-4 space-y-2 text-sm text-white/90">
-                    <li>· Free health screenings</li>
-                    <li>· Career guidance for youth</li>
-                    <li>· Local businesses & samples</li>
-                    <li>· Massage therapy & wellness</li>
-                    <li>· Prizes and giveaways</li>
-                  </ul>
-                </div>
-                <p className="mt-8 font-display text-lg italic text-[color:var(--color-gold-200)]">
-                  Showcase. Connect. Succeed.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -158,7 +104,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="mt-4 text-sm text-[color:var(--color-navy-700)] leading-relaxed">
-                Be one of the first Adventist-owned businesses listed in the ASI Cayman directory.
+                Be one of the first Adventist-owned businesses listed in the marketplace.
               </p>
               <Link href="/membership" className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--color-gold-700)] hover:text-[color:var(--color-gold-600)]">
                 List your business <ArrowRight size={14} />
@@ -172,7 +118,7 @@ export default function HomePage() {
       <section className="border-t border-[color:var(--color-navy-100)] bg-[color:var(--color-cream)]/40">
         <div className="mx-auto max-w-6xl px-5 lg:px-8 py-14 grid md:grid-cols-3 items-center gap-6">
           <div className="md:col-span-2">
-            <h3 className="font-display text-2xl">Have a question or want to partner with ASI Cayman?</h3>
+            <h3 className="font-display text-2xl">Have a question or want to partner with us?</h3>
             <p className="mt-2 text-[color:var(--color-navy-700)]">
               Reach us at <a href={`mailto:${SITE.email}`} className="underline underline-offset-4">{SITE.email}</a> or WhatsApp <a href={SITE.whatsappLink} className="underline underline-offset-4">{SITE.whatsapp}</a>.
             </p>
@@ -200,7 +146,7 @@ function Pillar({ icon, title, children }: { icon: React.ReactNode; title: strin
   );
 }
 
-function ExpoSpotlight() {
+function MarketplaceSpotlight() {
   return (
     <div className="relative card overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[color:var(--color-navy-900)] via-[color:var(--color-navy-800)] to-[color:var(--color-teal-600)]" />
@@ -209,21 +155,32 @@ function ExpoSpotlight() {
           "radial-gradient(circle at 20% 20%, var(--color-gold-300) 0%, transparent 35%), radial-gradient(circle at 80% 80%, var(--color-teal-400) 0%, transparent 40%)",
       }} />
       <div className="relative p-8 text-white">
-        <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-gold-300)]">June 28 · 2:00 PM</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-gold-300)]">
+          {SITE.shortName} · Grand Cayman
+        </p>
         <h3 className="mt-3 font-display text-3xl leading-tight">
-          Business & Career<br />Expo 2026
+          Adventist Business<br />Marketplace
         </h3>
         <p className="mt-3 text-sm text-white/85 max-w-xs">
-          The Lion Center, Grand Cayman. Free admission. Family friendly.
+          A trusted directory of Adventist-owned businesses, professionals, and tradespeople
+          across the Cayman Islands.
         </p>
-        <div className="mt-6 flex flex-wrap gap-2">
-          <span className="badge bg-white/10 text-white">Free</span>
-          <span className="badge bg-white/10 text-white">Health</span>
-          <span className="badge bg-white/10 text-white">Career</span>
-          <span className="badge bg-white/10 text-white">Prizes</span>
-        </div>
+        <ul className="mt-6 space-y-2 text-sm text-white/90">
+          <li className="flex items-center gap-2.5">
+            <CheckCircle2 size={14} className="text-[color:var(--color-gold-300)] shrink-0" />
+            Vetted, Adventist-owned businesses
+          </li>
+          <li className="flex items-center gap-2.5">
+            <CheckCircle2 size={14} className="text-[color:var(--color-gold-300)] shrink-0" />
+            Search by category &amp; offer
+          </li>
+          <li className="flex items-center gap-2.5">
+            <CheckCircle2 size={14} className="text-[color:var(--color-gold-300)] shrink-0" />
+            Free for the community
+          </li>
+        </ul>
         <p className="mt-8 font-display italic text-[color:var(--color-gold-200)]">
-          Showcase. Connect. Succeed.
+          {SITE.tagline}
         </p>
       </div>
     </div>

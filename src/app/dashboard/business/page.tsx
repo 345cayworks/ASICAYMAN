@@ -93,7 +93,7 @@ export default async function BusinessListingPage() {
             {listing ? "Edit your listing" : "Add your business"}
           </h1>
           <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
-            Approved listings appear in the public ASI Cayman directory. Edits return your listing to "Pending" for review.
+            Approved listings appear in the public Adventist Business Marketplace. Edits return your listing to &ldquo;Pending&rdquo; for review.
           </p>
         </div>
         {listing && <span className={`badge badge-${listing.status === "APPROVED" ? "approved" : listing.status === "REJECTED" ? "rejected" : "pending"}`}>{listing.status}</span>}
@@ -144,7 +144,7 @@ export default async function BusinessListingPage() {
 
         <label>
           <span className="field-label">Special offer (optional)</span>
-          <input name="specialOffer" defaultValue={listing?.specialOffer ?? ""} maxLength={500} className="field-input" placeholder="e.g. 10% off for ASI members" />
+          <input name="specialOffer" defaultValue={listing?.specialOffer ?? ""} maxLength={500} className="field-input" placeholder="e.g. 10% off for marketplace members" />
         </label>
 
         <fieldset className="grid gap-3 sm:grid-cols-3">

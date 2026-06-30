@@ -6,8 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const SITE = {
-  name: "ASI Cayman",
-  longName: "Adventist-Laymen's Services & Industries — Cayman",
+  name: "Adventist Business Marketplace",
+  shortName: "ABM",
+  longName: "Adventist Business Marketplace — Cayman Islands",
   tagline: "Showcase. Connect. Succeed.",
   email: "asicayman@gmail.com",
   whatsapp: "345-324-0458",

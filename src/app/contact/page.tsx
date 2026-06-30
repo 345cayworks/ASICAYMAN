@@ -13,8 +13,8 @@ export default function ContactPage() {
           Let's talk.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[color:var(--color-navy-700)] leading-relaxed">
-          Questions about membership, the expo, partnerships, or how to get involved with ASI Cayman?
-          Send a message — we'd love to hear from you.
+          Questions about membership, listings, partnerships, or how to get involved with the
+          {" "}{SITE.name}? Send a message — we&apos;d love to hear from you.
         </p>
       </section>
 

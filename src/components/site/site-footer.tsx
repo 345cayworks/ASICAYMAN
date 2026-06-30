@@ -13,11 +13,10 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-5 lg:px-8 py-16">
         <div className="grid md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
-            <h3 className="font-display text-2xl text-white">ASI Cayman</h3>
+            <h3 className="font-display text-2xl text-white">{SITE.name}</h3>
             <p className="mt-3 text-sm text-[color:var(--color-navy-200)] max-w-md leading-relaxed">
-              {SITE.longName}. A volunteer membership organization of Seventh-day
-              Adventist business owners, professionals, and entrepreneurs serving
-              the Cayman Islands since 2001.
+              A directory and community of Seventh-day Adventist business owners,
+              professionals, and entrepreneurs serving the Cayman Islands.
             </p>
             <p className="mt-4 text-xs tracking-[0.18em] uppercase text-[color:var(--color-gold-400)]">
               {SITE.tagline}
@@ -27,10 +26,10 @@ export function SiteFooter() {
           <div>
             <h4 className="text-sm font-semibold text-white mb-3">Explore</h4>
             <ul className="space-y-2 text-sm text-[color:var(--color-navy-200)]">
-              <li><Link href="/about" className="hover:text-white">About ASI</Link></li>
-              <li><Link href="/expo" className="hover:text-white">Expo 2026</Link></li>
+              <li><Link href="/about" className="hover:text-white">About us</Link></li>
+              <li><Link href="/directory" className="hover:text-white">Business directory</Link></li>
               <li><Link href="/membership" className="hover:text-white">Membership</Link></li>
-              <li><Link href="/directory" className="hover:text-white">Directory</Link></li>
+              <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
             </ul>
           </div>
 
@@ -52,7 +51,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between gap-3 text-xs text-[color:var(--color-navy-300)]">
-          <p>© {new Date().getFullYear()} ASI Cayman. Part of ASI, Inter-American Division.</p>
+          <p>© {new Date().getFullYear()} {SITE.name}. All rights reserved.</p>
           <p>Built with care for the Cayman Adventist community.</p>
         </div>
       </div>
