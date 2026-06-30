@@ -16,6 +16,16 @@
   // Non-secret env vars. Real secrets (AUTH_SECRET, AD_ENGINE_KEY,
   // DATABASE_URL, etc.) get pushed via `wrangler secret put`.
   "vars": {
-    "NEXT_TELEMETRY_DISABLED": "1"
-  }
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "STORAGE_DRIVER": "r2"
+  },
+  // Receipt + uploaded-file storage. Create the bucket once via:
+  //   wrangler r2 bucket create abc-cayman-uploads
+  // The `BUCKET` binding is what the R2Driver in src/lib/storage.ts looks up.
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "abc-cayman-uploads"
+    }
+  ]
 }

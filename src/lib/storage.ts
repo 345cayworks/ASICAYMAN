@@ -1,10 +1,13 @@
 /**
- * Storage adapter — abstraction over local filesystem (dev) and Netlify Blobs
- * (production). Swap drivers via STORAGE_DRIVER env var.
+ * Storage adapter — abstraction over local filesystem (dev), Netlify Blobs
+ * (Netlify prod), and Cloudflare R2 (Cloudflare Workers prod). Swap drivers
+ * via the `STORAGE_DRIVER` env var; auto-detection handles the platform
+ * defaults so dev rarely needs to set it.
  */
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import type { R2Bucket } from "@cloudflare/workers-types";
 
 export interface StoredFile {
   key: string;
@@ -67,13 +70,64 @@ class NetlifyBlobsDriver implements StorageDriver {
   }
 }
 
+class R2Driver implements StorageDriver {
+  // The R2 bucket binding name in wrangler.jsonc. Stays as "BUCKET" by
+  // convention; override at construction if a deployment uses a different
+  // binding name.
+  private binding: string;
+  constructor(binding = "BUCKET") {
+    this.binding = binding;
+  }
+  async put({ folder, filename, contentType, body }: Parameters<StorageDriver["put"]>[0]) {
+    // Lazy-import so this module still resolves outside the Workers runtime
+    // (local dev, Netlify builds) where `@opennextjs/cloudflare` isn't loaded.
+    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+    const env = getCloudflareContext().env as unknown as Record<string, R2Bucket>;
+    const bucket = env[this.binding];
+    if (!bucket) {
+      throw new Error(
+        `R2 bucket binding "${this.binding}" not found on the Worker. ` +
+          "Check wrangler.jsonc r2_buckets configuration.",
+      );
+    }
+    const safeName = sanitize(filename);
+    const id = crypto.randomBytes(8).toString("hex");
+    const key = path.posix.join(folder, `${id}-${safeName}`);
+    await bucket.put(key, body as ArrayBuffer | Uint8Array, {
+      httpMetadata: { contentType },
+    });
+    return {
+      key,
+      url: `/api/files/${key}`,
+      contentType,
+      size: body.byteLength,
+    };
+  }
+}
+
 function sanitize(name: string): string {
   return name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
 }
 
 export function getStorage(): StorageDriver {
-  const driver = process.env.STORAGE_DRIVER ?? (process.env.NETLIFY ? "netlify-blobs" : "local");
-  return driver === "netlify-blobs" ? new NetlifyBlobsDriver() : new LocalDriver();
+  const driver = resolveDriver();
+  if (driver === "netlify-blobs") return new NetlifyBlobsDriver();
+  if (driver === "r2") return new R2Driver();
+  return new LocalDriver();
+}
+
+// Exposed so the /api/files/[...path] route resolves to the same driver
+// `getStorage` would have used. Read-only: callers should not pass this
+// value back around the system.
+export function resolveDriver(): "local" | "netlify-blobs" | "r2" {
+  const explicit = process.env.STORAGE_DRIVER;
+  if (explicit === "local" || explicit === "netlify-blobs" || explicit === "r2") {
+    return explicit;
+  }
+  if (process.env.NETLIFY) return "netlify-blobs";
+  // No reliable env signal for Workers — default to local unless explicitly
+  // set via wrangler.jsonc vars (STORAGE_DRIVER=r2).
+  return "local";
 }
 
 export const ALLOWED_RECEIPT_TYPES = new Set([
