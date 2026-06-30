@@ -3,8 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  // Driver adapters (used by @prisma/adapter-neon to run on Cloudflare
-  // Workers) became stable in Prisma 6 — no previewFeatures flag needed.
 }
 
 datasource db {
