@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import type { R2Bucket } from "@cloudflare/workers-types";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { resolveDriver } from "@/lib/storage";
 
 /**
  * Serves uploaded files (currently receipts) with access control.
@@ -12,10 +10,8 @@ import { resolveDriver } from "@/lib/storage";
  * - Authenticated users: can view files they own (uploaded themselves).
  * - Anyone else: 403.
  *
- * Driver fan-out:
- * - Local: reads from ./.uploads
- * - Netlify Blobs: pulls from the asi-cayman store
- * - Cloudflare R2: pulls from the BUCKET binding
+ * In dev (local driver): reads from ./.uploads
+ * In production (netlify-blobs driver): pulls from Netlify Blobs
  */
 
 export const runtime = "nodejs"; // we need fs + @netlify/blobs
@@ -69,7 +65,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Params
     }
   }
 
-  const driver = resolveDriver();
+  const driver = process.env.STORAGE_DRIVER ?? (process.env.NETLIFY ? "netlify-blobs" : "local");
 
   if (driver === "netlify-blobs") {
     const { getStore } = await import("@netlify/blobs");
@@ -80,23 +76,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<Params
     return new NextResponse(stream as ReadableStream, {
       headers: {
         "Content-Type": (meta?.metadata?.contentType as string) ?? "application/octet-stream",
-        "X-Content-Type-Options": "nosniff",
-        "Content-Disposition": "inline",
-        "Cache-Control": "private, max-age=0, must-revalidate",
-      },
-    });
-  }
-
-  if (driver === "r2") {
-    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
-    const env = getCloudflareContext().env as unknown as Record<string, R2Bucket>;
-    const bucket = env.BUCKET;
-    if (!bucket) return new NextResponse("Storage not configured", { status: 500 });
-    const obj = await bucket.get(key);
-    if (!obj) return new NextResponse("Not found", { status: 404 });
-    return new NextResponse(obj.body as unknown as ReadableStream, {
-      headers: {
-        "Content-Type": obj.httpMetadata?.contentType ?? "application/octet-stream",
         "X-Content-Type-Options": "nosniff",
         "Content-Disposition": "inline",
         "Cache-Control": "private, max-age=0, must-revalidate",
