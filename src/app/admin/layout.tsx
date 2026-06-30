@@ -31,8 +31,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <path d="M9 21V12.5C9 10.567 10.567 9 12.5 9C14.433 9 16 10.567 16 12.5V21M16 12.5C16 10.567 17.567 9 19.5 9C21.433 9 23 10.567 23 12.5V21" stroke="var(--color-gold-400)" strokeWidth="1.6" strokeLinecap="round" />
               <circle cx="16" cy="16" r="1.6" fill="var(--color-gold-400)" />
             </svg>
-            <span className="font-display text-lg tracking-tight text-white">
-              ASI <span className="text-[color:var(--color-gold-400)]">Cayman</span>
+            <span className="font-display text-base tracking-tight text-white leading-tight">
+              Adventist Business{" "}
+              <span className="text-[color:var(--color-gold-400)]">Community</span>
             </span>
           </div>
           <p className="pl-12 -mt-0.5 text-xs uppercase tracking-[0.18em] text-[color:var(--color-gold-400)]">Admin</p>

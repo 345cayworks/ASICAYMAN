@@ -21,14 +21,14 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL ?? "http://localhost:3000"),
   title: {
-    default: "ASI Cayman — Connecting Adventist Business, Ministry & Community",
-    template: "%s · ASI Cayman",
+    default: "Adventist Business Community — Cayman Islands",
+    template: "%s · Adventist Business Community",
   },
   description:
-    "ASI Cayman brings together Seventh-day Adventist business owners, professionals, and entrepreneurs to support Christ-centered outreach and community development in the Cayman Islands.",
+    "A trusted directory of Seventh-day Adventist business owners, professionals, and tradespeople across the Cayman Islands. Search, list, and connect.",
   openGraph: {
-    title: "ASI Cayman",
-    description: "Showcase. Connect. Succeed. — The Cayman Islands chapter of ASI.",
+    title: "Adventist Business Community",
+    description: "Showcase. Connect. Succeed. — Adventist-owned businesses in the Cayman Islands.",
     type: "website",
   },
 };

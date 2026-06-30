@@ -1,4 +1,4 @@
-import { Mail, MessageCircle, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { ContactForm } from "@/components/forms/contact-form";
 import { SITE } from "@/lib/utils";
 
@@ -13,8 +13,8 @@ export default function ContactPage() {
           Let's talk.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[color:var(--color-navy-700)] leading-relaxed">
-          Questions about membership, the expo, partnerships, or how to get involved with ASI Cayman?
-          Send a message — we'd love to hear from you.
+          Questions about membership, listings, partnerships, or how to get involved with the
+          {" "}{SITE.name}? Send a message — we&apos;d love to hear from you.
         </p>
       </section>
 
@@ -35,13 +35,6 @@ export default function ContactPage() {
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <MessageCircle size={16} className="mt-0.5 text-[color:var(--color-gold-600)]" />
-                <div>
-                  <p className="text-[color:var(--color-navy-700)]">WhatsApp</p>
-                  <a href={SITE.whatsappLink} className="text-[color:var(--color-navy-900)] hover:underline">{SITE.whatsapp}</a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
                 <MapPin size={16} className="mt-0.5 text-[color:var(--color-gold-600)]" />
                 <div>
                   <p className="text-[color:var(--color-navy-700)]">Region</p>
@@ -52,9 +45,13 @@ export default function ContactPage() {
           </div>
 
           <div className="card p-6 bg-[color:var(--color-cream)]/60">
-            <p className="section-eyebrow">For exhibitors</p>
+            <p className="section-eyebrow">List your business</p>
             <p className="mt-3 text-sm text-[color:var(--color-navy-700)] leading-relaxed">
-              For Expo 2026 booth questions, please use the <a href="/expo/register" className="underline underline-offset-4">registration form</a> — it captures the details we need.
+              Adventist-owned business in the Cayman Islands? Start with our{" "}
+              <a href="/membership/apply" className="underline underline-offset-4">
+                membership application
+              </a>{" "}
+              — it captures the details we need to add you to the directory.
             </p>
           </div>
         </aside>

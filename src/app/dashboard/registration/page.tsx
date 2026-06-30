@@ -63,15 +63,16 @@ export default async function MyRegistrationPage() {
     return (
       <div className="grid gap-6">
         <header>
-          <p className="section-eyebrow">Expo 2026</p>
-          <h1 className="mt-2 font-display text-3xl tracking-tight">No registration yet</h1>
+          <p className="section-eyebrow">Expo</p>
+          <h1 className="mt-2 font-display text-3xl tracking-tight">No registration on file</h1>
         </header>
         <div className="card p-10 text-center">
           <p className="text-[color:var(--color-navy-700)] max-w-md mx-auto">
-            You haven't registered a booth for the ASI Cayman Business & Career Expo 2026 yet.
+            You don&apos;t have an expo registration on your account. Reach out to us if you
+            think this is a mistake.
           </p>
-          <Link href="/expo/register" className="mt-6 btn btn-gold inline-flex">
-            Register a booth <ArrowRight size={14} />
+          <Link href="/contact" className="mt-6 btn btn-outline inline-flex">
+            Contact us <ArrowRight size={14} />
           </Link>
         </div>
       </div>
@@ -82,10 +83,10 @@ export default async function MyRegistrationPage() {
     <div className="grid gap-6">
       <header className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <p className="section-eyebrow">Expo 2026</p>
+          <p className="section-eyebrow">Expo registration</p>
           <h1 className="mt-2 font-display text-3xl tracking-tight">{registration.businessName}</h1>
           <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
-            Registered for the ASI Cayman Business & Career Expo on {registration.event.startDate.toDateString()}.
+            Booth registered for {registration.event.startDate.toDateString()}.
           </p>
         </div>
         <PaymentBadge status={registration.paymentStatus} />

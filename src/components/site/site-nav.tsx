@@ -9,9 +9,8 @@ import { cn } from "@/lib/utils";
 const links = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/expo", label: "Expo 2026" },
-  { href: "/membership", label: "Membership" },
   { href: "/directory", label: "Directory" },
+  { href: "/membership", label: "Membership" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -27,8 +26,10 @@ export function SiteNav() {
       <nav className="mx-auto max-w-6xl px-5 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
           <Logo />
-          <span className="font-display text-lg tracking-tight text-[color:var(--color-navy-900)]">
-            ASI <span className="text-[color:var(--color-gold-600)]">Cayman</span>
+          <span className="font-display text-lg tracking-tight text-[color:var(--color-navy-900)] leading-tight">
+            <span className="hidden sm:inline">Adventist Business </span>
+            <span className="sm:hidden">ABC </span>
+            <span className="text-[color:var(--color-gold-600)]">Community</span>
           </span>
         </Link>
 
@@ -57,8 +58,8 @@ export function SiteNav() {
           <Link href="/auth/signin" className="btn btn-outline text-sm">
             Sign in
           </Link>
-          <Link href="/expo/register" className="btn btn-gold text-sm">
-            Register for Expo
+          <Link href="/membership/apply" className="btn btn-gold text-sm">
+            Become a member
           </Link>
         </div>
 
@@ -89,8 +90,8 @@ export function SiteNav() {
               <Link href="/auth/signin" onClick={() => setOpen(false)} className="btn btn-outline flex-1 text-sm">
                 Sign in
               </Link>
-              <Link href="/expo/register" onClick={() => setOpen(false)} className="btn btn-gold flex-1 text-sm">
-                Register
+              <Link href="/membership/apply" onClick={() => setOpen(false)} className="btn btn-gold flex-1 text-sm">
+                Join
               </Link>
             </li>
           </ul>

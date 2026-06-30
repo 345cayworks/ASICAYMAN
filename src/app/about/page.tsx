@@ -1,30 +1,30 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/site/section-header";
+import { SITE } from "@/lib/utils";
 
-export const metadata = { title: "About ASI Cayman" };
+export const metadata = { title: "About the community" };
 
 const focusAreas = [
-  { title: "Health", body: "Free community screenings, lifestyle education, partnership with local clinics." },
-  { title: "Education", body: "Career guidance, mentoring, scholarships, and youth empowerment." },
-  { title: "Evangelism", body: "Christ-centered outreach in partnership with local Adventist churches." },
-  { title: "Community service", body: "Volunteering, disaster preparedness, neighborhood projects." },
-  { title: "Family concerns", body: "Marriage, parenting, and family-life support resources." },
-  { title: "Special projects", body: "Initiatives that respond to specific needs across the islands." },
+  { title: "Trust", body: "Listings are vetted so the public can find Adventist-owned businesses they can rely on." },
+  { title: "Visibility", body: "A clean public profile that puts Adventist-owned businesses in front of the right customers." },
+  { title: "Discovery", body: "Search by category, special offers, and location across Grand Cayman and beyond." },
+  { title: "Community", body: "Owners and professionals who back each other through referrals and shared work." },
+  { title: "Quality", body: "Members commit to integrity and a standard of work the community can recommend." },
+  { title: "Service", body: "Christ-centered work — believing that everyday business can be a form of service." },
 ];
 
 export default function AboutPage() {
   return (
     <>
       <section className="mx-auto max-w-6xl px-5 lg:px-8 pt-16 md:pt-24 pb-12">
-        <p className="section-eyebrow">About ASI Cayman</p>
+        <p className="section-eyebrow">About the community</p>
         <h1 className="mt-4 text-4xl md:text-5xl font-display tracking-tight max-w-3xl">
-          A fellowship of Adventist professionals serving the Cayman Islands.
+          A trusted community of Adventist-owned businesses in the Cayman Islands.
         </h1>
         <p className="mt-6 max-w-3xl text-lg text-[color:var(--color-navy-700)] leading-relaxed">
-          ASI — Adventist-Laymen's Services & Industries — is a worldwide membership organization
-          of Seventh-day Adventist business owners, professionals, entrepreneurs, and
-          service-minded individuals. We share Christ in the marketplace through business,
-          ministry, mentorship, and community impact.
+          The {SITE.name} is a directory and community of Seventh-day Adventist business owners,
+          professionals, and entrepreneurs across the Cayman Islands — built around shared faith,
+          integrity, and quality of work.
         </p>
       </section>
 
@@ -32,35 +32,34 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-5 lg:px-8 py-16 grid md:grid-cols-2 gap-12">
         <div>
-          <p className="section-eyebrow">Our story</p>
-          <h2 className="mt-2 font-display text-3xl">Formed in 2001.</h2>
+          <p className="section-eyebrow">How it works</p>
+          <h2 className="mt-2 font-display text-3xl">For owners and the public.</h2>
           <p className="mt-5 text-[color:var(--color-navy-700)] leading-relaxed">
-            ASI Cayman is the Cayman Islands chapter of ASI, organized in 2001 under the
-            Inter-American Division. For more than two decades we have brought together Adventist
-            laypeople and ministry to encourage one another, mentor the next generation, and serve
-            the Caymanian community.
+            Business owners apply for a listing, complete a short profile, and once approved they
+            appear in the public directory alongside other Adventist-owned businesses on the
+            island.
           </p>
           <p className="mt-4 text-[color:var(--color-navy-700)] leading-relaxed">
-            We exist to support Christ-centered outreach through enterprise, professional service,
-            and volunteerism — believing that work itself can be a ministry.
+            The public can search the directory by category, special offers, and location —
+            free of charge — to find the right business in minutes.
           </p>
         </div>
         <div className="card p-8">
-          <p className="section-eyebrow">Worldwide family</p>
-          <h3 className="mt-2 font-display text-2xl">Part of ASI, Inter-American Division.</h3>
+          <p className="section-eyebrow">Our roots</p>
+          <h3 className="mt-2 font-display text-2xl">Built on community relationships.</h3>
           <p className="mt-4 text-sm text-[color:var(--color-navy-700)] leading-relaxed">
-            We work in partnership with ASI chapters across the Caribbean and Latin America,
-            sharing best practices, training, and outreach opportunities. Our work is grounded in
-            the mission and message of the Seventh-day Adventist Church.
+            The community is organised by Seventh-day Adventist business leaders in the Cayman
+            Islands. Listings are vetted and we work directly with owners across the islands to
+            keep the directory current and trustworthy.
           </p>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-5 lg:px-8 py-16">
         <SectionHeader
-          eyebrow="Focus areas"
-          title="Where we serve."
-          subtitle="Six interconnected areas of outreach guide ASI Cayman's work each year."
+          eyebrow="What we stand for"
+          title="What the community is built on."
+          subtitle="Six values that shape how we run the community and how members serve the public."
         />
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {focusAreas.map((f) => (
@@ -73,11 +72,14 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 lg:px-8 py-16">
-        <SectionHeader eyebrow="Leadership" title="Our team." />
+        <SectionHeader eyebrow="Get listed" title="Ready to join?" />
         <div className="mt-10 card p-10 text-center">
           <p className="text-[color:var(--color-navy-700)] max-w-xl mx-auto">
-            Our leadership and committee profiles will be published here as we update the chapter
-            roster. Interested in serving? <Link href="/membership" className="underline underline-offset-4">Become a member</Link>.
+            Adventist-owned business in the Cayman Islands?{" "}
+            <Link href="/membership/apply" className="underline underline-offset-4">
+              Apply for membership
+            </Link>{" "}
+            to add your listing to the community directory.
           </p>
         </div>
       </section>

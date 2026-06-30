@@ -203,7 +203,7 @@ export function MembershipApplicationForm() {
         )}
       </button>
       <p className="text-xs text-[color:var(--color-navy-600)] text-center">
-        An ASI Cayman admin will review your application before activating full access.
+        An admin will review your application before activating full access.
       </p>
     </form>
   );

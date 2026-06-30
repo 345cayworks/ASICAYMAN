@@ -6,12 +6,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const SITE = {
-  name: "ASI Cayman",
-  longName: "Adventist-Laymen's Services & Industries — Cayman",
+  name: "Adventist Business Community",
+  shortName: "ABC",
+  longName: "Adventist Business Community — Cayman Islands",
   tagline: "Showcase. Connect. Succeed.",
-  email: "asicayman@gmail.com",
-  whatsapp: "345-324-0458",
-  whatsappLink: "https://wa.me/13453240458",
+  email: "info@345guide.com",
   rbcAccount: {
     name: "ASI Cayman Cheque Account",
     number: "06975-1154855",

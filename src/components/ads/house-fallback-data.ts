@@ -21,15 +21,9 @@ export const HOUSE_NUDGES: Record<HouseVariant, readonly HouseNudge[]> = {
   member: [
     {
       title: "List your business in the directory",
-      body: "Approved listings show up in the public ASI Cayman directory — add yours in a few minutes.",
+      body: "Approved listings show up in the public Adventist Business Community directory — add yours in a few minutes.",
       cta: "Add your business",
       href: "/dashboard/business",
-    },
-    {
-      title: "Register a booth at the Expo",
-      body: "The ASI Cayman Business & Career Expo is June 28, 2026. Member pricing applies year-round.",
-      cta: "Register a booth",
-      href: "/expo/register",
     },
     {
       title: "Browse your member benefits",
@@ -39,8 +33,8 @@ export const HOUSE_NUDGES: Record<HouseVariant, readonly HouseNudge[]> = {
     },
     {
       title: "See your listing in the public directory",
-      body: "How members of the community discover your business when they search.",
-      cta: "Visit the directory",
+      body: "How members of the public discover your business when they search the community.",
+      cta: "Open the directory",
       href: "/directory",
     },
     {
@@ -52,32 +46,26 @@ export const HOUSE_NUDGES: Record<HouseVariant, readonly HouseNudge[]> = {
   ],
   guest: [
     {
-      title: "Become an ASI Cayman member",
+      title: "Join the Adventist Business Community",
       body: "Join Adventist business owners, professionals, and entrepreneurs across the Cayman Islands.",
       cta: "Apply for membership",
       href: "/membership/apply",
     },
     {
-      title: "Business & Career Expo 2026",
-      body: "Free admission. Local Adventist-owned businesses, health screenings, career guidance and more.",
-      cta: "Expo details",
-      href: "/expo",
-    },
-    {
-      title: "Browse the member directory",
-      body: "Discover trusted businesses, professionals, and services run by members of our community.",
+      title: "Browse the community directory",
+      body: "Discover trusted Adventist-owned businesses, professionals, and services across the Cayman Islands.",
       cta: "Open directory",
       href: "/directory",
     },
     {
-      title: "What is ASI Cayman?",
-      body: "The Cayman Islands chapter of ASI — supporting Christ-centered outreach through business and ministry.",
-      cta: "About ASI Cayman",
+      title: "About the community",
+      body: "How the Adventist Business Community connects business owners and the public they serve.",
+      cta: "Learn more",
       href: "/about",
     },
     {
       title: "Have a question?",
-      body: "We'd love to hear from you. Reach the ASI Cayman team about membership, the expo, or partnerships.",
+      body: "We'd love to hear from you. Reach the team about membership, listings, or partnerships.",
       cta: "Get in touch",
       href: "/contact",
     },

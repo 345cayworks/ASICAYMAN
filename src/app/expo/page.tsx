@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, MapPin, Clock, ArrowRight, CheckCircle2 } from "lucide-react";
 import { SectionHeader } from "@/components/site/section-header";
@@ -5,6 +6,9 @@ import { SITE } from "@/lib/utils";
 import { AdBanner } from "@/components/ads/variants";
 import { AD_PLACEMENTS } from "@/components/ads/placements";
 
+// Hidden — public expo entry point disabled while the community directory
+// is the site's primary surface. Page code is retained so it can be
+// unhidden by removing the `notFound()` call below.
 export const metadata = { title: "Business & Career Expo 2026" };
 
 const attractions = [
@@ -49,6 +53,7 @@ const faqs = [
 ];
 
 export default function ExpoPage() {
+  notFound();
   return (
     <>
       {/* Hero */}
@@ -154,8 +159,7 @@ export default function ExpoPage() {
                 Pay at RBC to the <strong>{SITE.rbcAccount.name}</strong>,
                 account <strong>#{SITE.rbcAccount.number}</strong>. Upload your receipt through the
                 portal after registration, or send it to{" "}
-                <a href={`mailto:${SITE.email}`} className="underline underline-offset-4">{SITE.email}</a> /
-                WhatsApp <a href={SITE.whatsappLink} className="underline underline-offset-4">{SITE.whatsapp}</a>.
+                <a href={`mailto:${SITE.email}`} className="underline underline-offset-4">{SITE.email}</a>.
               </p>
             </div>
 

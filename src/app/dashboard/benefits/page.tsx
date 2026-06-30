@@ -18,7 +18,7 @@ export default async function BenefitsPage() {
         <p className="section-eyebrow">Member benefits</p>
         <h1 className="mt-2 font-display text-3xl tracking-tight">Your membership in action</h1>
         <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
-          What ASI Cayman membership unlocks. New benefits are added throughout the year.
+          What your community membership unlocks. New benefits are added throughout the year.
         </p>
       </header>
 

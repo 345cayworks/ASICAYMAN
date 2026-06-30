@@ -1,10 +1,14 @@
+import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { ExpoRegistrationForm } from "@/components/forms/expo-registration-form";
 import { SITE } from "@/lib/utils";
 
+// Hidden — public expo registration disabled. Remove the `notFound()` call
+// below to re-enable when needed.
 export const metadata = { title: "Register for Expo 2026" };
 
 export default async function ExpoRegisterPage() {
+  notFound();
   const session = await auth();
 
   return (
