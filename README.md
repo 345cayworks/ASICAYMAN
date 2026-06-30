@@ -146,7 +146,7 @@ Steps:
 3. In Netlify → Site configuration → Environment variables, set the few vars
    Neon does **not** provide:
    - `AUTH_SECRET` — `openssl rand -base64 32`
-   - `NEXTAUTH_URL` — your `*.netlify.app` URL (or custom domain)
+   - `NEXTAUTH_URL` — production URL: `https://abc.345guide.com` (or your `*.netlify.app` URL during transition)
    - `STORAGE_DRIVER=netlify-blobs`
    - (optional) `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` — otherwise the seed
      uses `admin@asicayman.org` / `ChangeMe-Immediately-2026`

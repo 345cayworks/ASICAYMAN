@@ -27,5 +27,16 @@
       "binding": "BUCKET",
       "bucket_name": "abc-cayman-uploads"
     }
+  ],
+  // Production domain. Requires the `345guide.com` zone to live in this
+  // Cloudflare account — Wrangler then issues a managed cert and attaches
+  // the Worker. Until DNS is ready, deploys still succeed at the
+  // workers.dev fallback; only the custom-domain attachment will error,
+  // and Wrangler retries cleanly on the next deploy.
+  "routes": [
+    {
+      "pattern": "abc.345guide.com",
+      "custom_domain": true
+    }
   ]
 }
