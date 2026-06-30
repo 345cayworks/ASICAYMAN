@@ -13,6 +13,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "ads:sync": "tsx scripts/sync-placements.ts",
+    "admin:bootstrap": "tsx scripts/bootstrap-admin.ts",
     "test": "node --import tsx --test tests/*.test.ts"
   },
   "prisma": {
