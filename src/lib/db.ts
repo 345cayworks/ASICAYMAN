@@ -32,11 +32,37 @@ function normalizeNeonUrl(url: string | undefined): string | undefined {
 
 const datasourceUrl = normalizeNeonUrl(rawUrl);
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+// On the Cloudflare Workers runtime the native Prisma query engine isn't
+// available, so we go through @prisma/adapter-neon + the Neon serverless
+// driver. On Node (dev, Netlify, scripts, migrations) we keep the native
+// engine — same connection string, no extra hop. Detect Workers via the
+// presence of the WebSocket-based runtime that Cloudflare exposes.
+function isWorkersRuntime(): boolean {
+  // navigator.userAgent on Workers is "Cloudflare-Workers"; checking it is
+  // safer than process.env signals which OpenNext sometimes synthesises.
+  const ua = (globalThis as { navigator?: { userAgent?: string } }).navigator?.userAgent;
+  return typeof ua === "string" && ua.includes("Cloudflare-Workers");
+}
+
+function makeClient(): PrismaClient {
+  const baseLog: ("query" | "error" | "warn")[] =
+    process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"];
+
+  if (isWorkersRuntime() && datasourceUrl) {
+    // Lazy-require so Node bundles don't pull in the Workers-flavoured
+    // websocket transport unnecessarily.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PrismaNeon } = require("@prisma/adapter-neon") as typeof import("@prisma/adapter-neon");
+    const adapter = new PrismaNeon({ connectionString: datasourceUrl });
+    return new PrismaClient({ adapter, log: baseLog });
+  }
+
+  return new PrismaClient({
     ...(datasourceUrl ? { datasourceUrl } : {}),
-    log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+    log: baseLog,
   });
+}
+
+export const prisma = globalForPrisma.prisma ?? makeClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
