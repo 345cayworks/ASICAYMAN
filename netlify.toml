@@ -16,6 +16,12 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# The background image worker imports Prisma. Netlify's bundler auto-detects
+# Prisma, but include the query-engine binary + schema explicitly so the
+# bundled function can reach the database at runtime.
+[functions."blog-image-worker-background"]
+  included_files = ["node_modules/.prisma/client/*.node", "prisma/schema.prisma"]
+
 # Long cache for static assets, no-cache for HTML
 [[headers]]
   for = "/_next/static/*"

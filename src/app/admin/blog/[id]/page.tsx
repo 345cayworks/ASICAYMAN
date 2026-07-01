@@ -12,6 +12,8 @@ import {
   removeCover,
 } from "../actions";
 import { InlineImageUploader } from "./inline-image-uploader";
+import { GenerateImagesButton } from "./generate-images-button";
+import { imageApiConfigured } from "@/lib/blog/images";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Edit post" };
@@ -120,6 +122,17 @@ export default async function EditBlogPostPage({ params, searchParams }: Props) 
           )}
         </div>
         <InlineImageUploader />
+
+        {isSuper && imageApiConfigured() && (
+          <div className="pt-4 border-t border-[color:var(--color-navy-100)]">
+            <GenerateImagesButton
+              postId={post.id}
+              initialStatus={post.imageJobStatus}
+              initialStage={post.imageJobStage}
+              initialError={post.imageJobError}
+            />
+          </div>
+        )}
       </section>
 
       {/* Publishing (superadmin) */}
