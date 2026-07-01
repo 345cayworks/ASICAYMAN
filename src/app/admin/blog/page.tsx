@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/rbac";
-import { createPost } from "./actions";
+import { textLlmConfigured } from "@/lib/blog/generate-runner";
+import { createPost, generateWithAI } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Blog" };
@@ -12,7 +14,8 @@ interface Props {
 
 export default async function AdminBlogPage({ searchParams }: Props) {
   await requireAdmin();
-  const { error } = await searchParams;
+  const { ok, error } = await searchParams;
+  const aiEnabled = textLlmConfigured();
 
   const posts = await prisma.blogPost.findMany({
     orderBy: [{ createdAt: "desc" }],
@@ -31,14 +34,26 @@ export default async function AdminBlogPage({ searchParams }: Props) {
 
   return (
     <div className="grid gap-6">
-      <header>
-        <p className="section-eyebrow">Admin</p>
-        <h1 className="mt-2 font-display text-3xl tracking-tight">Blog</h1>
-        <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
-          Write posts in Markdown. New posts start as drafts.
-        </p>
+      <header className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <p className="section-eyebrow">Admin</p>
+          <h1 className="mt-2 font-display text-3xl tracking-tight">Blog</h1>
+          <p className="mt-2 text-sm text-[color:var(--color-navy-700)]">
+            Write posts in Markdown. New posts start as drafts.
+          </p>
+        </div>
+        {aiEnabled && (
+          <form action={generateWithAI}>
+            <button className="btn btn-outline text-sm">
+              <Sparkles size={15} /> Generate with AI
+            </button>
+          </form>
+        )}
       </header>
 
+      {ok === "deleted" && (
+        <p className="card p-3 text-sm text-green-800 bg-green-50 border-green-200">Post deleted.</p>
+      )}
       {error && (
         <p className="card p-3 text-sm text-red-700 bg-red-50 border-red-200">{error}</p>
       )}
