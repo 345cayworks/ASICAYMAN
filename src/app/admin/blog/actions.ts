@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { requireAdmin, requireSuperadmin } from "@/lib/rbac";
 import { getStorage } from "@/lib/storage";
 import { slugify, parseTags } from "@/lib/blog/slug";
+import { runGenerate, textLlmConfigured } from "@/lib/blog/generate-runner";
 
 const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
@@ -56,6 +57,23 @@ function audit(
 function refreshPublic(slug?: string) {
   revalidatePath("/blog");
   if (slug) revalidatePath(`/blog/${slug}`);
+}
+
+// --- AI generation (on-demand draft) ----------------------------------------
+
+export async function generateWithAI() {
+  await requireAdmin();
+  if (!textLlmConfigured()) {
+    redirect("/admin/blog?error=" + encodeURIComponent("AI generation is not configured."));
+  }
+  // Admin explicitly asked, so bypass the daily-run idempotency guard.
+  const result = await runGenerate({ force: true });
+  if (result.status === "created") {
+    revalidatePath("/admin/blog");
+    redirect(`/admin/blog/${result.postId}?ok=ai-generated`);
+  }
+  const reason = result.status === "error" ? result.reason : `Skipped: ${result.reason}`;
+  redirect("/admin/blog?error=" + encodeURIComponent(reason));
 }
 
 // --- Create / update ---------------------------------------------------------

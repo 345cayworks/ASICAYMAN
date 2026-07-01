@@ -9,6 +9,13 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Standalone functions live here alongside the Next app: the scheduled cron
+# shims (blog-generate-daily, blog-publish-sweep) and the long-running image
+# worker (*-background). Each declares its own schedule/behaviour in code.
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 # Long cache for static assets, no-cache for HTML
 [[headers]]
   for = "/_next/static/*"
