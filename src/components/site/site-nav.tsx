@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -25,7 +26,14 @@ export function SiteNav() {
     <header className="sticky top-0 z-40 backdrop-blur-md bg-[color:var(--color-ivory)]/85 border-b border-[color:var(--color-navy-100)]">
       <nav className="mx-auto max-w-6xl px-5 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <Logo />
+          <Image
+            src="/logo-mark.png"
+            alt="Adventist Business Community"
+            width={36}
+            height={36}
+            priority
+            className="shrink-0 h-9 w-9"
+          />
           <span className="font-display text-lg tracking-tight text-[color:var(--color-navy-900)] leading-tight">
             <span className="hidden sm:inline">Adventist Business </span>
             <span className="sm:hidden">ABC </span>
@@ -98,20 +106,5 @@ export function SiteNav() {
         </div>
       )}
     </header>
-  );
-}
-
-function Logo() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="shrink-0" aria-hidden>
-      <circle cx="16" cy="16" r="15" stroke="var(--color-navy-900)" strokeWidth="1.5" />
-      <path
-        d="M9 21V12.5C9 10.567 10.567 9 12.5 9C14.433 9 16 10.567 16 12.5V21M16 12.5C16 10.567 17.567 9 19.5 9C21.433 9 23 10.567 23 12.5V21"
-        stroke="var(--color-gold-500)"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-      <circle cx="16" cy="16" r="1.6" fill="var(--color-gold-500)" />
-    </svg>
   );
 }
