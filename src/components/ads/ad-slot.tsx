@@ -217,12 +217,15 @@ export function AdSlot({
     // never widen its column and shift the page. `max-w-full` caps it to the slot.
     <div ref={containerRef} className={cn("w-full min-w-0 max-w-full", className)}>
       {variant === "banner" && (
+        // ~960px cap ≈ IAB Billboard (970x250). On wider hosts the banner
+        // centers instead of stretching, so the creative stays legible and
+        // matches typical ad-buy dimensions.
         <a
           href={ad.destinationUrl || "#"}
           onClick={handleClick}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          className="group relative block overflow-hidden rounded-xl border border-[color:var(--color-navy-100)] bg-white"
+          className="group relative block overflow-hidden rounded-xl border border-[color:var(--color-navy-100)] bg-white max-w-[960px] mx-auto"
         >
           <AdMedia
             ad={ad}
@@ -253,12 +256,15 @@ export function AdSlot({
       )}
 
       {variant === "card" && (
+        // 384px cap ≈ MPU / half-page sidebar family. No-op inside the
+        // 260-320px dashboard/right-rail columns; kicks in only if the card
+        // is placed in a wide host so it doesn't stretch absurdly.
         <a
           href={ad.destinationUrl || "#"}
           onClick={handleClick}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          className="card relative block overflow-hidden hover:border-[color:var(--color-navy-300)] transition-colors"
+          className="card relative block overflow-hidden hover:border-[color:var(--color-navy-300)] transition-colors max-w-sm mx-auto"
         >
           <AdMedia ad={ad} imgClassName="w-full max-w-full aspect-[16/9] object-cover" />
           <div className="p-4 sm:p-5">
@@ -279,12 +285,14 @@ export function AdSlot({
       )}
 
       {variant === "native" && (
+        // 672px cap ≈ feed-item width. Prevents inline-native ads from
+        // dominating full-width containers.
         <a
           href={ad.destinationUrl || "#"}
           onClick={handleClick}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          className="card relative flex gap-4 p-4 hover:border-[color:var(--color-navy-300)] transition-colors"
+          className="card relative flex gap-4 p-4 hover:border-[color:var(--color-navy-300)] transition-colors max-w-2xl mx-auto"
         >
           {ad.imageUrl && (
             // eslint-disable-next-line @next/next/no-img-element
