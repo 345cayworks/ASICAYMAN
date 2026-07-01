@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Search, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { SectionHeader } from "@/components/site/section-header";
+import { AdBanner } from "@/components/ads/variants";
 import { AD_PLACEMENTS } from "@/components/ads/placements";
 import { PageWithRightColumn } from "@/components/ads/page-with-right-column";
 
@@ -72,6 +73,10 @@ export default async function DirectoryPage({ searchParams }: Props) {
           </select>
           <button className="btn btn-primary">Search</button>
         </form>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 lg:px-8 pb-4">
+        <AdBanner placement={AD_PLACEMENTS.guestDirectoryTop} userRole="GUEST" />
       </section>
 
       <section className="mx-auto max-w-6xl px-5 lg:px-8 pb-24">
