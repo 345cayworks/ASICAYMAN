@@ -15,6 +15,9 @@ export const AD_PLACEMENTS = {
   // Per-page right-column placements (new wrapper)
   memberDashboardRight: "asicayman_member_dashboard_right",
   guestDirectoryRight: "asicayman_guest_directory_right",
+
+  // Per-page banner placements
+  guestDirectoryTop: "asicayman_guest_directory_top",
 } as const;
 
 export type AdPlacementKey = keyof typeof AD_PLACEMENTS;
@@ -35,4 +38,10 @@ export const PLACEMENT_MANIFEST: PlacementManifestEntry[] = [
   { key: AD_PLACEMENTS.expoBanner, name: "Expo — Banner", type: "BANNER" },
   { key: AD_PLACEMENTS.memberDashboardRight, name: "Member Dashboard — Right Column", type: "SIDEBAR" },
   { key: AD_PLACEMENTS.guestDirectoryRight, name: "Guest Directory — Right Column", type: "SIDEBAR" },
+  {
+    key: AD_PLACEMENTS.guestDirectoryTop,
+    name: "Guest Directory — Top Banner",
+    type: "BANNER",
+    description: "Wide banner above the listings grid on /directory (public, GUEST audience).",
+  },
 ];
