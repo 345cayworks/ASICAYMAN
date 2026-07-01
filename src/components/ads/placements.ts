@@ -33,11 +33,16 @@ import type { PlacementManifestEntry } from "@/lib/ad-engine";
 
 export const PLACEMENT_MANIFEST: PlacementManifestEntry[] = [
   { key: AD_PLACEMENTS.dashboardTop, name: "Member Dashboard — Top Banner", type: "BANNER" },
-  { key: AD_PLACEMENTS.sidebar, name: "Portal Sidebar", type: "SIDEBAR" },
+  // NOTE: the following three placements were previously typed SIDEBAR but
+  // are actually rendered via <SponsoredCard> → <AdSlot variant="card">.
+  // Under the engine's format-strict serving that meant any approved CARD-
+  // format creatives were never fed to them, so the slots displayed nothing.
+  // Type here is CARD so it lines up with the render.
+  { key: AD_PLACEMENTS.sidebar, name: "Portal Sidebar", type: "CARD" },
   { key: AD_PLACEMENTS.directoryInline, name: "Directory — Inline Native", type: "NATIVE" },
   { key: AD_PLACEMENTS.expoBanner, name: "Expo — Banner", type: "BANNER" },
-  { key: AD_PLACEMENTS.memberDashboardRight, name: "Member Dashboard — Right Column", type: "SIDEBAR" },
-  { key: AD_PLACEMENTS.guestDirectoryRight, name: "Guest Directory — Right Column", type: "SIDEBAR" },
+  { key: AD_PLACEMENTS.memberDashboardRight, name: "Member Dashboard — Right Column", type: "CARD" },
+  { key: AD_PLACEMENTS.guestDirectoryRight, name: "Guest Directory — Right Column", type: "CARD" },
   {
     key: AD_PLACEMENTS.guestDirectoryTop,
     name: "Guest Directory — Top Banner",
