@@ -52,6 +52,7 @@ model User {
   paymentReceipts     PaymentReceipt[]
   reviewedReceipts    PaymentReceipt[]    @relation("ReceiptReviewer")
   authoredAnnouncements Announcement[]    @relation("AnnouncementAuthor")
+  authoredBlogPosts   BlogPost[]          @relation("BlogAuthor")
 
   @@index([role, status])
 }
@@ -353,4 +354,56 @@ model AuditLog {
   createdAt   DateTime @default(now())
 
   @@index([action, createdAt])
+}
+
+// ============================================================
+// Blog: manual + AI-generated posts (Markdown body), with an
+// async two-image generation job tracked inline on the post.
+// ============================================================
+
+enum BlogSource {
+  MANUAL
+  AI
+}
+
+enum ImageJobStatus {
+  PENDING
+  RUNNING
+  DONE
+  ERROR
+}
+
+model BlogPost {
+  id               String          @id @default(cuid())
+  slug             String          @unique
+  title            String
+  summary          String?
+  body             String          @db.Text // Markdown
+  tags             String[]        @default([])
+  seoDescription   String?
+  coverImageKey    String? // blob key of the cover image
+  source           BlogSource      @default(MANUAL)
+  isPublished      Boolean         @default(false)
+  publishedAt      DateTime?
+  scheduledFor     DateTime? // publish sweep makes it live at/after this time
+  authorUserId     String?
+
+  // Social distribution idempotency
+  socialSharedAt   DateTime?
+  socialShareError String?          @db.Text
+
+  // Async image-generation job (see the two-image generator)
+  imageJobStatus    ImageJobStatus?
+  imageJobStage     String?
+  imageJobError     String?          @db.Text
+  imageJobUpdatedAt DateTime?
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  author User? @relation("BlogAuthor", fields: [authorUserId], references: [id], onDelete: SetNull)
+
+  @@index([isPublished, publishedAt])
+  @@index([scheduledFor])
+  @@index([source, createdAt])
 }

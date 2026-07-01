@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/rbac";
 import { SignOutButton } from "@/components/site/sign-out-button";
-import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, Activity, Settings, LineChart, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Users, Briefcase, Ticket, Receipt, Megaphone, Activity, Settings, LineChart, ArrowLeft, Newspaper } from "lucide-react";
 
 const adminNav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/members", label: "Members", icon: Users },
   { href: "/admin/listings", label: "Listings", icon: Briefcase },
+  { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/registrations", label: "Expo registrations", icon: Ticket },
   { href: "/admin/receipts", label: "Receipts", icon: Receipt },
   { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
