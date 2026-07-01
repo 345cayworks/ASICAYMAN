@@ -28,11 +28,12 @@ export default async function DashboardHome({ searchParams }: Props) {
   const business = user.businessListings[0];
 
   return (
-    <PageWithRightColumn
-      adPlacement={AD_PLACEMENTS.memberDashboardRight}
-      fallbackVariant="member"
-      userRole={sessionUser.role}
-    >
+    // Welcome alert + top banner live OUTSIDE PageWithRightColumn so they
+    // span the full main-track width (~940px on lg) instead of squeezing
+    // into the wrapper's inner main column (~580px after the 320px right
+    // rail eats its share). Header + content stay in the wrapper so they
+    // line up with the right rail.
+    <div className="space-y-6">
       {welcome && (
         <div className="card p-5 bg-[color:var(--color-gold-50)] border-[color:var(--color-gold-200)] flex gap-3 items-start">
           <CheckCircle2 size={20} className="text-[color:var(--color-gold-700)] mt-0.5" />
@@ -45,19 +46,24 @@ export default async function DashboardHome({ searchParams }: Props) {
         </div>
       )}
 
-      <header>
-        <p className="section-eyebrow">Dashboard</p>
-        <h1 className="mt-2 font-display text-3xl md:text-4xl tracking-tight">
-          Hi, {user.name?.split(" ")[0] ?? "there"}.
-        </h1>
-        <p className="mt-2 text-[color:var(--color-navy-700)]">
-          Here&apos;s an overview of your {SITE.name} account.
-        </p>
-      </header>
-
       <AdBanner placement={AD_PLACEMENTS.dashboardTop} userRole={sessionUser.role} />
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <PageWithRightColumn
+        adPlacement={AD_PLACEMENTS.memberDashboardRight}
+        fallbackVariant="member"
+        userRole={sessionUser.role}
+      >
+        <header>
+          <p className="section-eyebrow">Dashboard</p>
+          <h1 className="mt-2 font-display text-3xl md:text-4xl tracking-tight">
+            Hi, {user.name?.split(" ")[0] ?? "there"}.
+          </h1>
+          <p className="mt-2 text-[color:var(--color-navy-700)]">
+            Here&apos;s an overview of your {SITE.name} account.
+          </p>
+        </header>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatusCard
           icon={<CheckCircle2 size={16} />}
           label="Membership"
@@ -131,8 +137,9 @@ export default async function DashboardHome({ searchParams }: Props) {
             <p className="mt-1 text-xs text-[color:var(--color-navy-600)]">See how your listing appears</p>
           </Link>
         </div>
-      </section>
-    </PageWithRightColumn>
+        </section>
+      </PageWithRightColumn>
+    </div>
   );
 }
 

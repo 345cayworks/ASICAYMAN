@@ -75,7 +75,7 @@ export default async function DirectoryPage({ searchParams }: Props) {
         </form>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 lg:px-8 pb-4">
+      <section className="mx-auto max-w-6xl px-5 lg:px-8 pb-10">
         <AdBanner placement={AD_PLACEMENTS.guestDirectoryTop} userRole="GUEST" />
       </section>
 
