@@ -230,7 +230,7 @@ export function AdSlot({
           <AdMedia
             ad={ad}
             banner
-            imgClassName="w-full max-w-full h-[120px] sm:h-[180px] lg:h-[240px] object-cover"
+            imgClassName="w-full max-w-full h-auto max-h-[120px] sm:max-h-[180px] lg:max-h-[240px] object-contain"
           />
           <div className="flex items-center justify-between gap-3 sm:gap-4 px-4 sm:px-5 py-3">
             <div className="min-w-0">
@@ -266,7 +266,7 @@ export function AdSlot({
           rel="noopener noreferrer sponsored"
           className="card relative block overflow-hidden hover:border-[color:var(--color-navy-300)] transition-colors max-w-sm mx-auto"
         >
-          <AdMedia ad={ad} imgClassName="w-full max-w-full aspect-[16/9] object-cover" />
+          <AdMedia ad={ad} imgClassName="w-full max-w-full h-auto max-h-[320px] object-contain" />
           <div className="p-4 sm:p-5">
             {ad.title && <p className="font-display text-base">{ad.title}</p>}
             {ad.description && (
